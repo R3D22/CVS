@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urogenital Module Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8faf9;
+            --card-bg: #ffffff;
+            --primary-green: #145a32;
+            --mcq-orange: #e67e22;
+            --border-color: #e0e6e3;
+            --text-dark: #1a1a1a;
+            --text-muted: #666666;
+            
+            /* Subject Colors */
+            --c-anatomy: #e8f5e9; --t-anatomy: #2e7d32;
+            --c-histology: #f3e5f5; --t-histology: #7b1fa2;
+            --c-physiology: #e3f2fd; --t-physiology: #1976d2;
+            --c-pathology: #fff3e0; --t-pathology: #e65100;
+            --c-microbiology: #e0f2f1; --t-microbiology: #00796b;
+            --c-pharmacology: #ffebee; --t-pharmacology: #c62828;
+            --c-parasitology: #fffde7; --t-parasitology: #fbc02d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-green);
+        }
+
+        .univ-title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* Overall Progress */
+        .overall-progress-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            margin-bottom: 30px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-green);
+        }
+
+        .progress-bar-bg {
+            background-color: #e9ecef;
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background-color: var(--primary-green);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Day Layout */
+        .day-section {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .day-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .day-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .day-date {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .day-icon {
+            font-size: 4rem;
+            margin: 10px 0;
+        }
+
+        .schedule-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .schedule-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .schedule-header h3 {
+            color: var(--primary-green);
+            font-size: 1.3rem;
+        }
+
+        /* Table Styles */
+        .lecture-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .lecture-table th {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .lecture-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .lecture-table tr {
+            transition: background-color 0.2s, opacity 0.3s;
+        }
+
+        .lecture-table tr:hover {
+            background-color: #f8faf9;
+        }
+
+        .lecture-table tr.completed td {
+            opacity: 0.4;
+        }
+        
+        .lecture-table tr.completed td:not(:first-child):not(:nth-child(2)) {
+            text-decoration: line-through;
+        }
+
+        .checkbox-cell {
+            width: 50px;
+            text-align: center !important;
+        }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .check-lec { accent-color: var(--primary-green); }
+        .check-mcq { accent-color: var(--mcq-orange); }
+
+        /* Lecture Links */
+        .lecture-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .lecture-link:hover {
+            color: var(--primary-green);
+            text-decoration: underline;
+        }
+
+        /* Subject Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .subject-anatomy { background-color: var(--c-anatomy); color: var(--t-anatomy); }
+        .subject-histology { background-color: var(--c-histology); color: var(--t-histology); }
+        .subject-physiology { background-color: var(--c-physiology); color: var(--t-physiology); }
+        .subject-pathology { background-color: var(--c-pathology); color: var(--t-pathology); }
+        .subject-microbiology { background-color: var(--c-microbiology); color: var(--t-microbiology); }
+        .subject-pharmacology { background-color: var(--c-pharmacology); color: var(--t-pharmacology); }
+        .subject-parasitology { background-color: var(--c-parasitology); color: var(--t-parasitology); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--primary-green);
+            font-size: 1.5rem;
+            letter-spacing: 15px;
+        }
+
+        /* Toast Notifications Styles */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toast {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(20, 90, 50, 0.25);
+            font-size: 1.1rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            direction: rtl;
+            text-align: right;
+            border-right: 6px solid #fbc02d;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .day-section {
+                grid-template-columns: 1fr;
+            }
+            .day-card {
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 15px;
+            }
+            .day-icon {
+                font-size: 2.5rem;
+                margin: 0;
+            }
+            .lecture-table th {
+                display: none;
+            }
+            .lecture-table td {
+                display: block;
+                padding: 5px 10px;
+                border: none;
+                text-align: left !important;
+            }
+            .lecture-table td.checkbox-cell {
+                display: inline-block;
+                width: auto;
+                margin-right: 15px;
+            }
+            .lecture-table tr {
+                display: block;
+                border-bottom: 1px solid var(--border-color);
+                padding: 10px 0;
+            }
+            #toast-container {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+            }
+            .toast {
+                text-align: center;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="univ-title">New Mansoura University • Mansoura Integrated Medical Program</div>
+        <div class="univ-title" style="color: var(--primary-green); font-weight: 600;">Dr. R3d</div>
+        <h1 class="main-title">UROGENITAL MODULE</h1>
+        <p class="subtitle">PAPER 1 STUDY PLAN: TOPICAL ORGANIZATION</p>
+    </div>
+
+    <div class="overall-progress-container">
+        <div class="progress-header">
+            <span>Overall Plan Completion (Lectures & MCQs)</span>
+            <span id="overall-percentage">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="overall-fill"></div>
+        </div>
+    </div>
+
+    <div id="schedule-container">
+        <!-- Content will be generated by JavaScript -->
+    </div>
+
+    <div class="footer">
+        🩺 🔬 💊 🩸 🧬 🧪
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<script>
+    const scheduleData = [
+        {
+            day: 1, date: "JUNE 5", title: "KIDNEY & UPPER URINARY SYSTEM", icon: "🧬",
+            lectures: [
+                { id: "L1", code: "L1", subject: "Anatomy", title: "Development of upper urinary system", link: "https://t.me/c/2366096034/5723/5737" },
+                { id: "L3", code: "L3", subject: "Anatomy", title: "Anatomy of upper urinary system", link: "https://t.me/c/2366096034/5723/5776" },
+                { id: "L5", code: "L5", subject: "Physiology", title: "Physiology of juxtaglomerular apparatus and renal blood flow", link: "https://t.me/c/2366096034/5723/5779" },
+                { id: "L6", code: "L6", subject: "Physiology", title: "Glomerular membrane and dynamics of glomerular filtrations and factors affecting filtration", link: "https://t.me/c/2366096034/5723/5780" },
+                { id: "L2", code: "L2", subject: "Histology", title: "Structure of the kidney", link: "https://t.me/c/2366096034/5723/5739" },
+                { id: "L4", code: "L4", subject: "Histology", title: "Histology of ureter and urinary bladder", link: "https://t.me/c/2366096034/5723/5778" },
+                { id: "L15", code: "L15", subject: "Pharmacology", title: "Diuretics 1 (loop and osmotic diuretics)", link: "https://t.me/c/2366096034/5723/5882" },
+                { id: "L8", code: "L8", subject: "Parasitology", title: "Genitourinary schistosomiasis part 1", link: "https://t.me/c/2366096034/5723/5861" }
+            ]
+        },
+        {
+            day: 2, date: "JUNE 6", title: "LOWER URINARY & WATER BALANCE", icon: "💧",
+            lectures: [
+                { id: "L9", code: "L9", subject: "Anatomy", title: "Anatomy of urinary bladder & urethra", link: "https://t.me/c/2366096034/5723/5865" },
+                { id: "L11", code: "L11", subject: "Anatomy", title: "Development of urinary bladder and urethra", link: "https://t.me/c/2366096034/5723/5870" },
+                { id: "L7", code: "L7", subject: "Physiology", title: "Absorptive and secretory functions of LH, DCT and CDs 2", link: "https://t.me/c/2366096034/5723/5860" },
+                { id: "L10", code: "L10", subject: "Physiology", title: "Water balance", link: "https://t.me/c/2366096034/5723/5867" },
+                { id: "L14", code: "L14", subject: "Physiology", title: "Na and K handling", link: "https://t.me/c/2366096034/5723/5881" },
+                { id: "L17", code: "L17", subject: "Pharmacology", title: "Diuretics 2 (Thiazide & k sparing diuretics)", link: "https://t.me/c/2366096034/5723/5900" },
+                { id: "L12", code: "L12", subject: "Pathology", title: "Urinary tract tumors", link: "https://t.me/c/2366096034/5723/5872" }
+            ]
+        },
+        {
+            day: 3, date: "JUNE 7", title: "MALE GENITAL SYSTEM & ACID-BASE", icon: "♂️",
+            lectures: [
+                { id: "L18", code: "L18", subject: "Anatomy", title: "Male genital system, spermatic cord & testis", link: "https://t.me/c/2366096034/5723/5941" },
+                { id: "L19", code: "L19", subject: "Histology", title: "Structure of the testis, spermatogenesis, mature spermatozoa", link: "https://t.me/c/2366096034/5723/5943" },
+                { id: "L21", code: "L21", subject: "Histology", title: "Structure of male genital ducts & accessory male genital glands", link: "https://t.me/c/2366096034/5723/5975" },
+                { id: "L16", code: "L16", subject: "Physiology", title: "Acid base balance", link: "https://t.me/c/2366096034/5723/5899" },
+                { id: "L20", code: "L20", subject: "Physiology", title: "Physiology of micturition", link: "https://t.me/c/2366096034/5723/5944" },
+                { id: "L13", code: "L13", subject: "Parasitology", title: "Genitourinary schistosomiasis part 2", link: "https://t.me/c/2366096034/5723/5880" },
+                { id: "L22", code: "L22", subject: "Microbiology", title: "Infection of urinary system part 1", link: "https://t.me/c/2366096034/5723/5976" }
+            ]
+        }
+    ];
+
+    // Load saved progress from Local Storage
+    let savedProgress = JSON.parse(localStorage.getItem('urogenitalProgressMCQ')) || {};
+
+    function saveProgress() {
+        localStorage.setItem('urogenitalProgressMCQ', JSON.stringify(savedProgress));
+        updateProgressBars();
+    }
+
+    function toggleCheckboxes(lecId, rowId) {
+        const lecCheckbox = document.getElementById(lecId);
+        const mcqCheckbox = document.getElementById(lecId + '_mcq');
+        const row = document.getElementById(rowId);
+        
+        savedProgress[lecId] = lecCheckbox.checked;
+        savedProgress[lecId + '_mcq'] = mcqCheckbox.checked;
+        
+        // Add completed class only if BOTH are checked
+        if (lecCheckbox.checked && mcqCheckbox.checked) {
+            row.classList.add('completed');
+        } else {
+            row.classList.remove('completed');
+        }
+        
+        saveProgress();
+    }
+
+    function updateProgressBars() {
+        let totalTasks = 0; // Each lecture = 1 task, Each MCQ = 1 task
+        let completedTasks = 0;
+
+        scheduleData.forEach(day => {
+            let dayTotalTasks = day.lectures.length * 2;
+            let dayCompletedTasks = 0;
+
+            day.lectures.forEach(lec => {
+                totalTasks += 2;
+                
+                if (savedProgress[lec.id]) {
+                    completedTasks++;
+                    dayCompletedTasks++;
+                }
+                if (savedProgress[lec.id + '_mcq']) {
+                    completedTasks++;
+                    dayCompletedTasks++;
+                }
+            });
+
+            // Update individual day progress
+            const dayBar = document.getElementById(`day-fill-${day.day}`);
+            if(dayBar) {
+                dayBar.style.width = `${(dayCompletedTasks / dayTotalTasks) * 100}%`;
+            }
+        });
+
+        const overallPercentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+        document.getElementById('overall-percentage').innerText = `${overallPercentage}%`;
+        document.getElementById('overall-fill').style.width = `${overallPercentage}%`;
+    }
+
+    function renderSchedule() {
+        const container = document.getElementById('schedule-container');
+        
+        scheduleData.forEach(day => {
+            let rowsHtml = '';
+            day.lectures.forEach(lec => {
+                const isLecChecked = savedProgress[lec.id] ? 'checked' : '';
+                const isMcqChecked = savedProgress[lec.id + '_mcq'] ? 'checked' : '';
+                const completedClass = (isLecChecked && isMcqChecked) ? 'completed' : '';
+                const subjectClass = `subject-${lec.subject.toLowerCase()}`;
+                
+                rowsHtml += `
+                    <tr id="row-${lec.id}" class="${completedClass}">
+                        <td class="checkbox-cell" title="Mark Lecture as Done">
+                            <input type="checkbox" id="${lec.id}" class="check-lec" ${isLecChecked} 
+                                onchange="toggleCheckboxes('${lec.id}', 'row-${lec.id}')">
+                        </td>
+                        <td class="checkbox-cell" title="Mark MCQs as Done">
+                            <input type="checkbox" id="${lec.id}_mcq" class="check-mcq" ${isMcqChecked} 
+                                onchange="toggleCheckboxes('${lec.id}', 'row-${lec.id}')">
+                        </td>
+                        <td style="font-weight: 600; color: var(--text-muted);">${lec.code}</td>
+                        <td><span class="badge ${subjectClass}">${lec.subject}</span></td>
+                        <td><a href="${lec.link}" target="_blank" class="lecture-link">${lec.title}</a></td>
+                    </tr>
+                `;
+            });
+
+            const dayHTML = `
+                <div class="day-section">
+                    <div class="day-card">
+                        <div class="day-number">DAY ${day.day}</div>
+                        <div class="day-date">${day.date}</div>
+                        <div class="day-icon">${day.icon}</div>
+                        <div class="progress-bar-bg" style="width: 100%; height: 8px; margin-top: 15px;">
+                            <div class="progress-bar-fill" id="day-fill-${day.day}"></div>
+                        </div>
+                    </div>
+                    <div class="schedule-card">
+                        <div class="schedule-header">
+                            <h3>${day.title}</h3>
+                        </div>
+                        <table class="lecture-table">
+                            <thead>
+                                <tr>
+                                    <th>📚 Lec</th>
+                                    <th>📝 MCQ</th>
+                                    <th>Code</th>
+                                    <th>Subject</th>
+                                    <th>Title (Click to open)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += dayHTML;
+        });
+
+        updateProgressBars();
+    }
+
+    // --- نظام الأذكار التلقائي ---
+    const athkar = [
+        "صلِّ على النبي ﷺ",
+        "سبحان الله وبحمده، سبحان الله العظيم",
+        "استغفر الله العظيم وأتوب إليه",
+        "لا حول ولا قوة إلا بالله",
+        "اللهم صلِّ وسلم وبارك على نبينا محمد",
+        "الحمد لله دائمًا وأبدًا",
+        "لا إله إلا أنت سبحانك إني كنت من الظالمين",
+        "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم",
+        "قال رسول الله ﷺ: «كلمتان خفيفتان على اللسان، ثقيلتان في الميزان: سبحان الله وبحمده، سبحان الله العظيم»",
+        "اللهم إني أسألك علماً نافعاً، ورزقاً طيباً، وعملاً متقبلاً"
+    ];
+
+    function showThikr() {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        
+        const randomThikr = athkar[Math.floor(Math.random() * athkar.length)];
+        toast.innerText = randomThikr;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 8000);
+    }
+
+    setInterval(showThikr, 300000); 
+    setTimeout(showThikr, 10000);
+
+    // Initialize
+    window.onload = renderSchedule;
+</script>
+
+</body>
+</html>
