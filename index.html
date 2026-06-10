@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urogenital Module Planner</title>
+    <title>Urogenital Module Planner - Paper 2</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Light Mode Variables */
             --bg-color: #f8faf9;
             --card-bg: #ffffff;
             --primary-green: #145a32;
@@ -14,8 +15,10 @@
             --border-color: #e0e6e3;
             --text-dark: #1a1a1a;
             --text-muted: #666666;
+            --hover-bg: #f4f7f5;
+            --progress-bg: #e9ecef;
             
-            /* Subject Colors */
+            /* Subject Colors - Light */
             --c-anatomy: #e8f5e9; --t-anatomy: #2e7d32;
             --c-histology: #f3e5f5; --t-histology: #7b1fa2;
             --c-physiology: #e3f2fd; --t-physiology: #1976d2;
@@ -23,6 +26,28 @@
             --c-microbiology: #e0f2f1; --t-microbiology: #00796b;
             --c-pharmacology: #ffebee; --t-pharmacology: #c62828;
             --c-parasitology: #fffde7; --t-parasitology: #fbc02d;
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --primary-green: #4caf50;
+            --mcq-orange: #f39c12;
+            --border-color: #333333;
+            --text-dark: #f5f5f5;
+            --text-muted: #aaaaaa;
+            --hover-bg: #2a2a2a;
+            --progress-bg: #333333;
+            
+            /* Subject Colors - Dark */
+            --c-anatomy: rgba(46, 125, 50, 0.2);     --t-anatomy: #81c784;
+            --c-histology: rgba(123, 31, 162, 0.2);  --t-histology: #ce93d8;
+            --c-physiology: rgba(25, 118, 210, 0.2); --t-physiology: #90caf9;
+            --c-pathology: rgba(230, 81, 0, 0.2);    --t-pathology: #ffb74d;
+            --c-microbiology: rgba(0, 121, 107, 0.2);--t-microbiology: #80cbc4;
+            --c-pharmacology: rgba(198, 40, 40, 0.2);--t-pharmacology: #ef9a9a;
+            --c-parasitology: rgba(251, 192, 45, 0.2);--t-parasitology: #fff59d;
         }
 
         * {
@@ -37,6 +62,7 @@
             color: var(--text-dark);
             padding: 20px;
             line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -49,6 +75,36 @@
             margin-bottom: 40px;
             padding-bottom: 20px;
             border-bottom: 2px solid var(--primary-green);
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--primary-green);
+            transform: scale(1.05);
         }
 
         .univ-title {
@@ -63,12 +119,13 @@
             font-size: 2.5rem;
             color: var(--primary-green);
             font-weight: 700;
+            margin-top: 15px;
         }
 
         .subtitle {
             font-size: 1.2rem;
             color: var(--text-muted);
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         /* Overall Progress */
@@ -79,6 +136,7 @@
             border: 1px solid var(--border-color);
             box-shadow: 0 4px 6px rgba(0,0,0,0.02);
             margin-bottom: 30px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .progress-header {
@@ -90,17 +148,18 @@
         }
 
         .progress-bar-bg {
-            background-color: #e9ecef;
+            background-color: var(--progress-bg);
             height: 12px;
             border-radius: 10px;
             overflow: hidden;
+            transition: background-color 0.3s ease;
         }
 
         .progress-bar-fill {
             background-color: var(--primary-green);
             height: 100%;
             width: 0%;
-            transition: width 0.5s ease-in-out;
+            transition: width 0.5s ease-in-out, background-color 0.3s ease;
         }
 
         /* Day Layout */
@@ -122,7 +181,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: transform 0.2s;
+            transition: transform 0.2s, background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .day-card:hover {
@@ -143,6 +202,7 @@
         .day-icon {
             font-size: 4rem;
             margin: 10px 0;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         }
 
         .schedule-card {
@@ -151,6 +211,7 @@
             border-radius: 16px;
             padding: 24px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .schedule-header {
@@ -192,7 +253,7 @@
         }
 
         .lecture-table tr:hover {
-            background-color: #f8faf9;
+            background-color: var(--hover-bg);
         }
 
         .lecture-table tr.completed td {
@@ -239,6 +300,7 @@
             font-size: 0.85rem;
             font-weight: 600;
             display: inline-block;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .subject-anatomy { background-color: var(--c-anatomy); color: var(--t-anatomy); }
@@ -276,7 +338,7 @@
             color: white;
             padding: 16px 24px;
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(20, 90, 50, 0.25);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
             font-size: 1.1rem;
             font-weight: 600;
             opacity: 0;
@@ -325,6 +387,10 @@
                 border-bottom: 1px solid var(--border-color);
                 padding: 10px 0;
             }
+            .header-top {
+                flex-direction: row;
+                align-items: center;
+            }
             #toast-container {
                 bottom: 20px;
                 right: 20px;
@@ -341,10 +407,15 @@
 
 <div class="container">
     <div class="header">
-        <div class="univ-title">New Mansoura University • Mansoura Integrated Medical Program</div>
-        <div class="univ-title" style="color: var(--primary-green); font-weight: 600;">Dr. R3d</div>
+        <div class="header-top">
+            <div>
+                <div class="univ-title">New Mansoura University • Mansoura Integrated Medical Program</div>
+                <div class="univ-title" style="color: var(--primary-green); font-weight: 600;">Dr. R3d</div>
+            </div>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </div>
         <h1 class="main-title">UROGENITAL MODULE</h1>
-        <p class="subtitle">PAPER 1 STUDY PLAN: TOPICAL ORGANIZATION</p>
+        <p class="subtitle">PAPER 2 STUDY PLAN: BALANCED TOPICAL ORGANIZATION</p>
     </div>
 
     <div class="overall-progress-container">
@@ -370,49 +441,77 @@
 <script>
     const scheduleData = [
         {
-            day: 1, date: "JUNE 5", title: "KIDNEY & UPPER URINARY SYSTEM", icon: "🧬",
+            day: 1, date: "JUNE 10", title: "PELVIC ANATOMY & MALE REPRODUCTIVE PATHOLOGY", icon: "🩻",
             lectures: [
-                { id: "L1", code: "L1", subject: "Anatomy", title: "Development of upper urinary system", link: "https://t.me/c/2366096034/5723/5737" },
-                { id: "L3", code: "L3", subject: "Anatomy", title: "Anatomy of upper urinary system", link: "https://t.me/c/2366096034/5723/5776" },
-                { id: "L5", code: "L5", subject: "Physiology", title: "Physiology of juxtaglomerular apparatus and renal blood flow", link: "https://t.me/c/2366096034/5723/5779" },
-                { id: "L6", code: "L6", subject: "Physiology", title: "Glomerular membrane and dynamics of glomerular filtrations and factors affecting filtration", link: "https://t.me/c/2366096034/5723/5780" },
-                { id: "L2", code: "L2", subject: "Histology", title: "Structure of the kidney", link: "https://t.me/c/2366096034/5723/5739" },
-                { id: "L4", code: "L4", subject: "Histology", title: "Histology of ureter and urinary bladder", link: "https://t.me/c/2366096034/5723/5778" },
-                { id: "L15", code: "L15", subject: "Pharmacology", title: "Diuretics 1 (loop and osmotic diuretics)", link: "https://t.me/c/2366096034/5723/5882" },
-                { id: "L8", code: "L8", subject: "Parasitology", title: "Genitourinary schistosomiasis part 1", link: "https://t.me/c/2366096034/5723/5861" }
+                { id: "L26", code: "L26", subject: "Anatomy", title: "Pelvic wall, nerves & blood supply", link: "https://t.me/c/2366096034/5723/6200" },
+                { id: "L28", code: "L28", subject: "Anatomy", title: "Female genital system", link: "https://t.me/c/2366096034/5723/6212" },
+                { id: "L23", code: "L23", subject: "Physiology", title: "Male reproductive system", link: "https://t.me/c/2366096034/5723/5977" },
+                { id: "L24", code: "L24", subject: "Pathology", title: "Pathology of prostatic diseases and male genital system", link: "https://t.me/c/2366096034/5723/6197" },
+                { id: "S1", code: "S1", subject: "Pathology", title: "Urinary tract obstruction and infection", link: "https://t.me/c/2366096034/5723/6221" },
+                { id: "L25", code: "L25", subject: "Microbiology", title: "Infection of urinary system part 2", link: "https://t.me/c/2366096034/5723/6199" },
+                { id: "L35", code: "L35", subject: "Pharmacology", title: "Pharmacology of sex hormone part 1", link: "https://t.me/c/2366096034/5723/6234" },
+                { id: "L27", code: "L27", subject: "Histology", title: "Structure of the ovary, oviduct", link: "https://t.me/c/2366096034/5723/6211" },
+                { id: "L37", code: "L37", subject: "Parasitology", title: "Trichomoniasis vaginalis & Carcinogenic parasitosis part 1", link: "https://t.me/c/2366096034/5723/6238" }
             ]
         },
         {
-            day: 2, date: "JUNE 6", title: "LOWER URINARY & WATER BALANCE", icon: "💧",
+            day: 2, date: "JUNE 11", title: "FEMALE REPRODUCTION & GYNECOLOGIC PATHOLOGY", icon: "🧬",
             lectures: [
-                { id: "L9", code: "L9", subject: "Anatomy", title: "Anatomy of urinary bladder & urethra", link: "https://t.me/c/2366096034/5723/5865" },
-                { id: "L11", code: "L11", subject: "Anatomy", title: "Development of urinary bladder and urethra", link: "https://t.me/c/2366096034/5723/5870" },
-                { id: "L7", code: "L7", subject: "Physiology", title: "Absorptive and secretory functions of LH, DCT and CDs 2", link: "https://t.me/c/2366096034/5723/5860" },
-                { id: "L10", code: "L10", subject: "Physiology", title: "Water balance", link: "https://t.me/c/2366096034/5723/5867" },
-                { id: "L14", code: "L14", subject: "Physiology", title: "Na and K handling", link: "https://t.me/c/2366096034/5723/5881" },
-                { id: "L17", code: "L17", subject: "Pharmacology", title: "Diuretics 2 (Thiazide & k sparing diuretics)", link: "https://t.me/c/2366096034/5723/5900" },
-                { id: "L12", code: "L12", subject: "Pathology", title: "Urinary tract tumors", link: "https://t.me/c/2366096034/5723/5872" }
+                { id: "L32", code: "L32", subject: "Anatomy", title: "Development of gonads", link: "https://t.me/c/2366096034/5723/6227" },
+                { id: "L40", code: "L40", subject: "Anatomy", title: "Development of duct system & external genitalia, & breast", link: "https://t.me/c/2366096034/5723/6257" },
+                { id: "L31", code: "L31", subject: "Physiology", title: "Female reproductive system", link: "https://t.me/c/2366096034/5723/6220" },
+                { id: "L34", code: "L34", subject: "Pathology", title: "Pathology of ovarian diseases", link: "https://t.me/c/2366096034/5723/6232" },
+                { id: "L38", code: "L38", subject: "Pathology", title: "Pathology of female genital uterus, vagina, vulva", link: "https://t.me/c/2366096034/5723/6246" },
+                { id: "L30", code: "L30", subject: "Microbiology", title: "Genital system infections", link: "https://t.me/c/2366096034/5723/6219" },
+                { id: "L36", code: "L36", subject: "Microbiology", title: "Viral genital infection", link: "https://t.me/c/2366096034/5723/6237" },
+                { id: "L39", code: "L39", subject: "Pharmacology", title: "Pharmacology of sex hormone part 2", link: "https://t.me/c/2366096034/5723/6249" },
+                { id: "L29", code: "L29", subject: "Histology", title: "Histology of oviduct and uterus", link: "https://t.me/c/2366096034/5723/6218" }
             ]
         },
         {
-            day: 3, date: "JUNE 7", title: "MALE GENITAL SYSTEM & ACID-BASE", icon: "♂️",
+            day: 3, date: "JUNE 12", title: "PERINEUM, PREGNANCY, PLACENTA & BREAST", icon: "🩺",
             lectures: [
-                { id: "L18", code: "L18", subject: "Anatomy", title: "Male genital system, spermatic cord & testis", link: "https://t.me/c/2366096034/5723/5941" },
-                { id: "L19", code: "L19", subject: "Histology", title: "Structure of the testis, spermatogenesis, mature spermatozoa", link: "https://t.me/c/2366096034/5723/5943" },
-                { id: "L21", code: "L21", subject: "Histology", title: "Structure of male genital ducts & accessory male genital glands", link: "https://t.me/c/2366096034/5723/5975" },
-                { id: "L16", code: "L16", subject: "Physiology", title: "Acid base balance", link: "https://t.me/c/2366096034/5723/5899" },
-                { id: "L20", code: "L20", subject: "Physiology", title: "Physiology of micturition", link: "https://t.me/c/2366096034/5723/5944" },
-                { id: "L13", code: "L13", subject: "Parasitology", title: "Genitourinary schistosomiasis part 2", link: "https://t.me/c/2366096034/5723/5880" },
-                { id: "L22", code: "L22", subject: "Microbiology", title: "Infection of urinary system part 1", link: "https://t.me/c/2366096034/5723/5976" }
+                { id: "L45", code: "L45", subject: "Anatomy", title: "Perineum part 1", link: "https://t.me/c/2366096034/5723/6300" },
+                { id: "L47", code: "L47", subject: "Anatomy", title: "Perineum part 2", link: "https://t.me/c/2366096034/5723/6332" },
+                { id: "L33", code: "L33", subject: "Physiology", title: "Physiology of female reproduction, mammary glands", link: "https://t.me/c/2366096034/5723/6229" },
+                { id: "L42", code: "L42", subject: "Pathology", title: "Pathology of breast diseases", link: "https://t.me/c/2366096034/5723/6273" },
+                { id: "L44", code: "L44", subject: "Microbiology", title: "Congenital viral infection", link: "https://t.me/c/2366096034/5723/6281" },
+                { id: "L46", code: "L46", subject: "Pharmacology", title: "Contraception", link: "https://t.me/c/2366096034/5723/6302" },
+                { id: "L48", code: "L48", subject: "Pharmacology", title: "Drugs acting in uterus, ovulation", link: "https://t.me/c/2366096034/5723/6334" },
+                { id: "L41", code: "L41", subject: "Histology", title: "Structure of placenta & mammary gland", link: "https://t.me/c/2366096034/5723/6272" },
+                { id: "L43", code: "L43", subject: "Parasitology", title: "Trichomoniasis vaginalis & Carcinogenic parasitosis part 2", link: "https://t.me/c/2366096034/5723/6280" }
             ]
         }
     ];
 
-    // Load saved progress from Local Storage
-    let savedProgress = JSON.parse(localStorage.getItem('urogenitalProgressMCQ')) || {};
+    // --- نظام الوضع الليلي (Dark Mode) ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.innerHTML = '☀️';
+    } else {
+        themeToggle.innerHTML = '🌙';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        let theme = 'light';
+        if (document.body.classList.contains('dark-mode')) {
+            theme = 'dark';
+            themeToggle.innerHTML = '☀️';
+        } else {
+            themeToggle.innerHTML = '🌙';
+        }
+        localStorage.setItem('theme', theme);
+    });
+
+    // Load saved progress from Local Storage for PAPER 2
+    let savedProgress = JSON.parse(localStorage.getItem('urogenitalProgressPaper2')) || {};
 
     function saveProgress() {
-        localStorage.setItem('urogenitalProgressMCQ', JSON.stringify(savedProgress));
+        localStorage.setItem('urogenitalProgressPaper2', JSON.stringify(savedProgress));
         updateProgressBars();
     }
 
@@ -424,7 +523,6 @@
         savedProgress[lecId] = lecCheckbox.checked;
         savedProgress[lecId + '_mcq'] = mcqCheckbox.checked;
         
-        // Add completed class only if BOTH are checked
         if (lecCheckbox.checked && mcqCheckbox.checked) {
             row.classList.add('completed');
         } else {
@@ -435,7 +533,7 @@
     }
 
     function updateProgressBars() {
-        let totalTasks = 0; // Each lecture = 1 task, Each MCQ = 1 task
+        let totalTasks = 0;
         let completedTasks = 0;
 
         scheduleData.forEach(day => {
@@ -455,7 +553,6 @@
                 }
             });
 
-            // Update individual day progress
             const dayBar = document.getElementById(`day-fill-${day.day}`);
             if(dayBar) {
                 dayBar.style.width = `${(dayCompletedTasks / dayTotalTasks) * 100}%`;
@@ -469,6 +566,7 @@
 
     function renderSchedule() {
         const container = document.getElementById('schedule-container');
+        container.innerHTML = ''; 
         
         scheduleData.forEach(day => {
             let rowsHtml = '';
@@ -513,7 +611,7 @@
                             <thead>
                                 <tr>
                                     <th>📚 Lec</th>
-                                    <th>📝 MCQ</th>
+                                    <th>✅ MCQ</th>
                                     <th>Lec. No.</th>
                                     <th>Subject</th>
                                     <th>Title (Click to open)</th>
@@ -567,15 +665,13 @@
             setTimeout(() => {
                 toast.remove();
             }, 500);
-        }, 8000); // الذكر بيختفي بعد 8 ثواني
+        }, 8000);
     }
 
-    // هنا بيتم تحديد الوقت: 300000 ملي ثانية = 5 دقائق بالظبط
-    // لو حبيت تغيرها لدقيقة واحدة خلي الرقم 60000
-    // لو حبيت تغيرها لـ 10 دقايق خلي الرقم 600000
+    // يظهر كل 5 دقائق
     setInterval(showThikr, 300000); 
 
-    // أول ذكر بيظهر بعد 10 ثواني من فتح الموقع كترحيب
+    // أول ذكر بعد 10 ثوانٍ كترحيب
     setTimeout(showThikr, 10000);
 
     // Initialize
