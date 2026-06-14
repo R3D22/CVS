@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urogenital Module Planner - Paper 2</title>
+    <title>GIT Module Planner - Paper 1</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,6 +17,8 @@
             --text-muted: #666666;
             --hover-bg: #f4f7f5;
             --progress-bg: #e9ecef;
+            --icon-color: #145a32;
+            --icon-accent: #e67e22;
             
             /* Subject Colors - Light */
             --c-anatomy: #e8f5e9; --t-anatomy: #2e7d32;
@@ -26,6 +28,7 @@
             --c-microbiology: #e0f2f1; --t-microbiology: #00796b;
             --c-pharmacology: #ffebee; --t-pharmacology: #c62828;
             --c-parasitology: #fffde7; --t-parasitology: #fbc02d;
+            --c-biochemistry: #e8eaf6; --t-biochemistry: #3f51b5;
         }
 
         /* Dark Mode Variables */
@@ -39,6 +42,8 @@
             --text-muted: #aaaaaa;
             --hover-bg: #2a2a2a;
             --progress-bg: #333333;
+            --icon-color: #4caf50;
+            --icon-accent: #f39c12;
             
             /* Subject Colors - Dark */
             --c-anatomy: rgba(46, 125, 50, 0.2);     --t-anatomy: #81c784;
@@ -48,6 +53,7 @@
             --c-microbiology: rgba(0, 121, 107, 0.2);--t-microbiology: #80cbc4;
             --c-pharmacology: rgba(198, 40, 40, 0.2);--t-pharmacology: #ef9a9a;
             --c-parasitology: rgba(251, 192, 45, 0.2);--t-parasitology: #fff59d;
+            --c-biochemistry: rgba(63, 81, 181, 0.2); --t-biochemistry: #9fa8da;
         }
 
         * {
@@ -68,6 +74,7 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding-bottom: 40px;
         }
 
         /* Header Styles */
@@ -200,9 +207,12 @@
         }
 
         .day-icon {
-            font-size: 4rem;
-            margin: 10px 0;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
         }
 
         .schedule-card {
@@ -310,6 +320,7 @@
         .subject-microbiology { background-color: var(--c-microbiology); color: var(--t-microbiology); }
         .subject-pharmacology { background-color: var(--c-pharmacology); color: var(--t-pharmacology); }
         .subject-parasitology { background-color: var(--c-parasitology); color: var(--t-parasitology); }
+        .subject-biochemistry { background-color: var(--c-biochemistry); color: var(--t-biochemistry); }
 
         /* Footer */
         .footer {
@@ -318,8 +329,8 @@
             padding: 30px;
             border-top: 1px solid var(--border-color);
             color: var(--primary-green);
-            font-size: 1.5rem;
-            letter-spacing: 15px;
+            font-size: 1.2rem;
+            letter-spacing: 10px;
         }
 
         /* Toast Notifications Styles */
@@ -365,8 +376,9 @@
                 padding: 15px;
             }
             .day-icon {
-                font-size: 2.5rem;
                 margin: 0;
+                width: 50px;
+                height: 50px;
             }
             .lecture-table th {
                 display: none;
@@ -414,8 +426,8 @@
             </div>
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </div>
-        <h1 class="main-title">UROGENITAL MODULE</h1>
-        <p class="subtitle">PAPER 2 STUDY PLAN: BALANCED TOPICAL ORGANIZATION</p>
+        <h1 class="main-title">GASTROINTESTINAL TRACT (GIT) MODULE</h1>
+        <p class="subtitle">PAPER 1 STUDY PLAN: TOPICAL ORGANIZATION</p>
     </div>
 
     <div class="overall-progress-container">
@@ -439,79 +451,71 @@
 <div id="toast-container"></div>
 
 <script>
+    // Minimalist Premium Line-Art Medical SVGs (Responsive to Dark Mode)
+    const mouthSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M12 28C14 18 24 16 32 22C40 16 50 18 52 28C55 36 48 46 32 50C16 46 9 36 12 28Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 30C22 34 26 33 32 33C38 33 42 34 49 30" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M24 38C28 42 36 42 40 38" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`;
+
+    const stomachSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M32 8V18" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M36 18C44 19 52 24 52 34C52 46 40 54 30 54C16 54 12 44 15 36C18 31 22 29 26 33C29 36 30 41 35 41C40 41 43 36 42 31C41 25 38 20 32 18" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M15 36H7" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`;
+
+    const liverSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M10 38C10 26 24 16 42 18C52 19 56 25 54 33C52 42 38 46 28 42C18 38 10 42 10 38Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 18C30 25 28 32 28 42" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+        <path d="M21 40C19 43 20 49 24 49C27 49 27 44 26 42" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+
     const scheduleData = [
         {
-            day: 1, date: "JUNE 10", title: "PELVIC ANATOMY & MALE REPRODUCTIVE PATHOLOGY", icon: "🩻",
+            day: 1, date: "JUNE 15", title: "ORAL CAVITY, PHARYNX & ESOPHAGUS", icon: mouthSvg,
             lectures: [
-                { id: "L26", code: "L26", subject: "Anatomy", title: "Pelvic wall, nerves & blood supply", link: "https://t.me/c/2366096034/5723/6200" },
-                { id: "L28", code: "L28", subject: "Anatomy", title: "Female genital system", link: "https://t.me/c/2366096034/5723/6212" },
-                { id: "L23", code: "L23", subject: "Physiology", title: "Male reproductive system", link: "https://t.me/c/2366096034/5723/5977" },
-                { id: "L24", code: "L24", subject: "Pathology", title: "Pathology of prostatic diseases and male genital system", link: "https://t.me/c/2366096034/5723/6197" },
-                { id: "S1", code: "S1", subject: "Pathology", title: "Urinary tract obstruction and infection", link: "https://t.me/c/2366096034/5723/6221" },
-                { id: "L25", code: "L25", subject: "Microbiology", title: "Infection of urinary system part 2", link: "https://t.me/c/2366096034/5723/6199" },
-                { id: "L35", code: "L35", subject: "Pharmacology", title: "Pharmacology of sex hormone part 1", link: "https://t.me/c/2366096034/5723/6234" },
-                { id: "L27", code: "L27", subject: "Histology", title: "Structure of the ovary, oviduct", link: "https://t.me/c/2366096034/5723/6211" },
-                { id: "L37", code: "L37", subject: "Parasitology", title: "Trichomoniasis vaginalis & Carcinogenic parasitosis part 1", link: "https://t.me/c/2366096034/5723/6238" }
+                { id: "L1_A", code: "L1", subject: "Anatomy", title: "Oral cavity & pharynx", link: "https://t.me/c/2366096034/4222/4237" },
+                { id: "L4_A", code: "L4", subject: "Anatomy", title: "Salivary gland & esophagus", link: "https://t.me/c/2366096034/4222/4255" },
+                { id: "L5_H", code: "L5", subject: "Histology", title: "Histology of lip, tongue & salivary gland", link: "https://t.me/c/2366096034/4222/4256" },
+                { id: "L3_P", code: "L3", subject: "Physiology", title: "Regulation of GIT functions & physiology of salivary secretion", link: "https://t.me/c/2366096034/4222/4254" },
+                { id: "L8_P", code: "L8", subject: "Physiology", title: "Physiology of mastication, swallowing, motor functions of esophagus and LES", link: "https://t.me/c/2366096034/4222/4331" },
+                { id: "L9_Pa", code: "L9", subject: "Pathology", title: "Pathology of oropharyngeal and salivary gland diseases", link: "https://t.me/c/2366096034/4222/4332" },
+                { id: "L2_B", code: "L2", subject: "Biochemistry", title: "Digestion & absorption of macronutrients", link: "https://t.me/c/2366096034/4222/4238" },
+                { id: "L6_B", code: "L6", subject: "Biochemistry", title: "Glucose oxidation", link: "https://t.me/c/2366096034/4222/4288" }
             ]
         },
         {
-            day: 2, date: "JUNE 11", title: "FEMALE REPRODUCTION & GYNECOLOGIC PATHOLOGY", icon: "🧬",
+            day: 2, date: "JUNE 16", title: "STOMACH & ABDOMINAL WALL", icon: stomachSvg,
             lectures: [
-                { id: "L32", code: "L32", subject: "Anatomy", title: "Development of gonads", link: "https://t.me/c/2366096034/5723/6227" },
-                { id: "L40", code: "L40", subject: "Anatomy", title: "Development of duct system & external genitalia, & breast", link: "https://t.me/c/2366096034/5723/6257" },
-                { id: "L31", code: "L31", subject: "Physiology", title: "Female reproductive system", link: "https://t.me/c/2366096034/5723/6220" },
-                { id: "L34", code: "L34", subject: "Pathology", title: "Pathology of ovarian diseases", link: "https://t.me/c/2366096034/5723/6232" },
-                { id: "L38", code: "L38", subject: "Pathology", title: "Pathology of female genital uterus, vagina, vulva", link: "https://t.me/c/2366096034/5723/6246" },
-                { id: "L30", code: "L30", subject: "Microbiology", title: "Genital system infections", link: "https://t.me/c/2366096034/5723/6219" },
-                { id: "L36", code: "L36", subject: "Microbiology", title: "Viral genital infection", link: "https://t.me/c/2366096034/5723/6237" },
-                { id: "L39", code: "L39", subject: "Pharmacology", title: "Pharmacology of sex hormone part 2", link: "https://t.me/c/2366096034/5723/6249" },
-                { id: "L29", code: "L29", subject: "Histology", title: "Histology of oviduct and uterus", link: "https://t.me/c/2366096034/5723/6218" }
+                { id: "L12_A", code: "L12", subject: "Anatomy", title: "Anterior abdominal wall", link: "https://t.me/c/2366096034/4222/4369" },
+                { id: "L7_A", code: "L7", subject: "Anatomy", title: "Posterior abdominal & stomach", link: "https://t.me/c/2366096034/4222/4326" },
+                { id: "L10_H", code: "L10", subject: "Histology", title: "Structure of the esophagus and stomach", link: "https://t.me/c/2366096034/4222/4367" },
+                { id: "L11_P", code: "L11", subject: "Physiology", title: "LES and secretory functions of the stomach", link: "https://t.me/c/2366096034/4222/4368" },
+                { id: "L13_P", code: "L13", subject: "Physiology", title: "Motor functions of the stomach and gastric emptying", link: "https://t.me/c/2366096034/4222/4435" },
+                { id: "L14_Pa", code: "L14", subject: "Pathology", title: "Pathology of esophageal and gastric diseases", link: "https://t.me/c/2366096034/4222/4436" },
+                { id: "L16_Ph", code: "L16", subject: "Pharmacology", title: "Drugs used in peptic ulcer", link: "https://t.me/c/2366096034/4222/4482" },
+                { id: "L17_B", code: "L17", subject: "Biochemistry", title: "Glycogen metabolism & glycogenesis", link: "https://t.me/c/2366096034/4222/4483" }
             ]
         },
         {
-            day: 3, date: "JUNE 12", title: "PERINEUM, PREGNANCY, PLACENTA & BREAST", icon: "🩺",
+            day: 3, date: "JUNE 17", title: "LIVER, BILIARY SYSTEM & METABOLISM", icon: liverSvg,
             lectures: [
-                { id: "L45", code: "L45", subject: "Anatomy", title: "Perineum part 1", link: "https://t.me/c/2366096034/5723/6300" },
-                { id: "L47", code: "L47", subject: "Anatomy", title: "Perineum part 2", link: "https://t.me/c/2366096034/5723/6332" },
-                { id: "L33", code: "L33", subject: "Physiology", title: "Physiology of female reproduction, mammary glands", link: "https://t.me/c/2366096034/5723/6229" },
-                { id: "L42", code: "L42", subject: "Pathology", title: "Pathology of breast diseases", link: "https://t.me/c/2366096034/5723/6273" },
-                { id: "L44", code: "L44", subject: "Microbiology", title: "Congenital viral infection", link: "https://t.me/c/2366096034/5723/6281" },
-                { id: "L46", code: "L46", subject: "Pharmacology", title: "Contraception", link: "https://t.me/c/2366096034/5723/6302" },
-                { id: "L48", code: "L48", subject: "Pharmacology", title: "Drugs acting in uterus, ovulation", link: "https://t.me/c/2366096034/5723/6334" },
-                { id: "L41", code: "L41", subject: "Histology", title: "Structure of placenta & mammary gland", link: "https://t.me/c/2366096034/5723/6272" },
-                { id: "L43", code: "L43", subject: "Parasitology", title: "Trichomoniasis vaginalis & Carcinogenic parasitosis part 2", link: "https://t.me/c/2366096034/5723/6280" }
+                { id: "L19_A", code: "L19", subject: "Anatomy", title: "GIT blood supply & portal system", link: "https://t.me/c/2366096034/4222/4499" },
+                { id: "L21_A", code: "L21", subject: "Anatomy", title: "Liver & Gall Bladder", link: "https://t.me/c/2366096034/4222/4585" },
+                { id: "L18_H", code: "L18", subject: "Histology", title: "Histology of the liver & GB and pancreas", link: "https://t.me/c/2366096034/4222/4498" },
+                { id: "L23_P", code: "L23", subject: "Physiology", title: "Physiology of Liver, Biliary System & Pancreatic Secretions", link: "https://t.me/c/2366096034/4222/4677" },
+                { id: "L15_M", code: "L15", subject: "Microbiology", title: "Bacterial infection of the gastrointestinal tract part 1", link: "https://t.me/c/2366096034/4222/4462" },
+                { id: "L20_B", code: "L20", subject: "Biochemistry", title: "Pentose shunt & monosaccharides metabolism", link: "https://t.me/c/2366096034/4222/4501" },
+                { id: "L22_B", code: "L22", subject: "Biochemistry", title: "Fatty Acid Synthesis & Lipogenesis", link: "https://t.me/c/2366096034/4222/4587" }
             ]
         }
     ];
 
-    // --- نظام الوضع الليلي (Dark Mode) ---
-    const themeToggle = document.getElementById('theme-toggle');
-    const currentTheme = localStorage.getItem('theme') || 'light';
-    
-    if (currentTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-        themeToggle.innerHTML = '☀️';
-    } else {
-        themeToggle.innerHTML = '🌙';
-    }
-
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark-mode');
-        let theme = 'light';
-        if (document.body.classList.contains('dark-mode')) {
-            theme = 'dark';
-            themeToggle.innerHTML = '☀️';
-        } else {
-            themeToggle.innerHTML = '🌙';
-        }
-        localStorage.setItem('theme', theme);
-    });
-
-    // Load saved progress from Local Storage for PAPER 2
-    let savedProgress = JSON.parse(localStorage.getItem('urogenitalProgressPaper2')) || {};
+    // Progress persistence Management
+    let savedProgress = JSON.parse(localStorage.getItem('gitProgressPaper1')) || {};
 
     function saveProgress() {
-        localStorage.setItem('urogenitalProgressPaper2', JSON.stringify(savedProgress));
+        localStorage.setItem('gitProgressPaper1', JSON.stringify(savedProgress));
         updateProgressBars();
     }
 
@@ -668,13 +672,9 @@
         }, 8000);
     }
 
-    // يظهر كل 5 دقائق
     setInterval(showThikr, 300000); 
-
-    // أول ذكر بعد 10 ثوانٍ كترحيب
     setTimeout(showThikr, 10000);
 
-    // Initialize
     window.onload = renderSchedule;
 </script>
 
