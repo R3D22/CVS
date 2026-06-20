@@ -216,4 +216,527 @@
         }
 
         .schedule-card {
-            background: var(--card
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .schedule-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .schedule-header h3 {
+            color: var(--primary-green);
+            font-size: 1.3rem;
+        }
+
+        /* Table Styles */
+        .lecture-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .lecture-table th {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .lecture-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .lecture-table tr {
+            transition: background-color 0.2s, opacity 0.3s;
+        }
+
+        .lecture-table tr:hover {
+            background-color: var(--hover-bg);
+        }
+
+        .lecture-table tr.completed td {
+            opacity: 0.4;
+        }
+        
+        .lecture-table tr.completed td:not(:first-child):not(:nth-child(2)) {
+            text-decoration: line-through;
+        }
+
+        .checkbox-cell {
+            width: 50px;
+            text-align: center !important;
+        }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .check-lec { accent-color: var(--primary-green); }
+        .check-mcq { accent-color: var(--mcq-orange); }
+
+        /* Lecture Links */
+        .lecture-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .lecture-link:hover {
+            color: var(--primary-green);
+            text-decoration: underline;
+        }
+
+        /* Subject Badges */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .subject-anatomy { background-color: var(--c-anatomy); color: var(--t-anatomy); }
+        .subject-histology { background-color: var(--c-histology); color: var(--t-histology); }
+        .subject-physiology { background-color: var(--c-physiology); color: var(--t-physiology); }
+        .subject-pathology { background-color: var(--c-pathology); color: var(--t-pathology); }
+        .subject-microbiology { background-color: var(--c-microbiology); color: var(--t-microbiology); }
+        .subject-pharmacology { background-color: var(--c-pharmacology); color: var(--t-pharmacology); }
+        .subject-parasitology { background-color: var(--c-parasitology); color: var(--t-parasitology); }
+        .subject-biochemistry { background-color: var(--c-biochemistry); color: var(--t-biochemistry); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            border-top: 1px solid var(--border-color);
+            color: var(--primary-green);
+            font-size: 1.2rem;
+            letter-spacing: 10px;
+        }
+
+        /* Toast Notifications Styles */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .toast {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            font-size: 1.1rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            direction: rtl;
+            text-align: right;
+            border-right: 6px solid #fbc02d;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .day-section {
+                grid-template-columns: 1fr;
+            }
+            .day-card {
+                flex-direction: row;
+                justify-content: space-around;
+                padding: 15px;
+            }
+            .day-icon {
+                margin: 0;
+                width: 50px;
+                height: 50px;
+            }
+            .lecture-table th {
+                display: none;
+            }
+            .lecture-table td {
+                display: block;
+                padding: 5px 10px;
+                border: none;
+                text-align: left !important;
+            }
+            .lecture-table td.checkbox-cell {
+                display: inline-block;
+                width: auto;
+                margin-right: 15px;
+            }
+            .lecture-table tr {
+                display: block;
+                border-bottom: 1px solid var(--border-color);
+                padding: 10px 0;
+            }
+            .header-top {
+                flex-direction: row;
+                align-items: center;
+            }
+            #toast-container {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+            }
+            .toast {
+                text-align: center;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-top">
+            <div>
+                <div class="univ-title">New Mansoura University • Mansoura Integrated Medical Program</div>
+                <div class="univ-title" style="color: var(--primary-green); font-weight: 600;">Dr. R3d</div>
+            </div>
+            <button id="theme-toggle" class="theme-toggle">🌙</button>
+        </div>
+        <h1 class="main-title">GASTROINTESTINAL TRACT (GIT) MODULE</h1>
+        <p class="subtitle">PAPER 2 STUDY PLAN: BALANCED INTEGRATED ORGANIZATION</p>
+    </div>
+
+    <div class="overall-progress-container">
+        <div class="progress-header">
+            <span>Overall Plan Completion (Lectures & MCQs)</span>
+            <span id="overall-percentage">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="overall-fill"></div>
+        </div>
+    </div>
+
+    <div id="schedule-container">
+        </div>
+
+    <div class="footer">
+        🩺 🔬 💊 🩸 🧬 🧪
+    </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+    // Premium Medical SVGs (Responsive to Dark Mode)
+    const intestineSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M16 12C24 12 28 20 36 20C44 20 48 12 56 12C56 12 60 28 56 44C52 60 40 60 36 60C32 60 20 60 16 44C12 28 16 12 16 12Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 28C26 32 30 28 34 32" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M38 44C42 40 46 44 50 40" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M22 46C26 50 30 46 34 50" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`;
+
+    const metabolismSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <circle cx="32" cy="32" r="20" stroke="var(--icon-color)" stroke-width="2.5"/>
+        <path d="M32 16V48M16 32H48" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="20" cy="20" r="4" fill="var(--icon-accent)"/>
+        <circle cx="44" cy="44" r="4" fill="var(--icon-accent)"/>
+        <path d="M24 24L40 40M24 40L40 24" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round"/>
+    </svg>`;
+
+    const liverSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M10 38C10 26 24 16 42 18C52 19 56 25 54 33C52 42 38 46 28 42C18 38 10 42 10 38Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 18C30 25 28 32 28 42" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/>
+        <path d="M21 40C19 43 20 49 24 49C27 49 27 44 26 42" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+
+    const pillSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <rect x="16" y="24" width="32" height="16" rx="8" stroke="var(--icon-color)" stroke-width="2.5" transform="rotate(-45 32 32)"/>
+        <path d="M26 26L38 38" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="48" cy="16" r="3" fill="var(--icon-accent)"/>
+        <circle cx="16" cy="48" r="2" fill="var(--icon-accent)"/>
+    </svg>`;
+
+    const bacterialSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M32 12C20 12 12 24 12 36C12 48 20 52 32 52C44 52 52 48 52 36C52 24 44 12 32 12Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 28L26 32M42 28L38 32M28 42H36" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="16" cy="16" r="2" fill="var(--icon-color)"/>
+        <circle cx="48" cy="16" r="2" fill="var(--icon-color)"/>
+        <circle cx="32" cy="6" r="2" fill="var(--icon-accent)"/>
+    </svg>`;
+
+    const scheduleData = [
+        {
+            day: 1, date: "JUNE 20", title: "NUTRITION & HISTOLOGY", icon: intestineSvg,
+            lectures: [
+                { id: "L28_H", code: "L28", subject: "Histology", title: "Histology of Small Intestine, Large Intestine & Anal Canal", link: "https://t.me/c/2366096034/4222/4744" },
+                { id: "L30_P", code: "L30", subject: "Physiology", title: "Pathophysiology of Nutritional Disorders (Obesity & Starvation)", link: "https://t.me/c/2366096034/4222/4747" },
+                { id: "S1_B", code: "S1", subject: "Biochemistry", title: "Applied Vitamins (Water-Soluble Vitamins)", link: "https://t.me/c/2366096034/4223/4826" },
+                { id: "S2_B", code: "S2", subject: "Biochemistry", title: "Applied Vitamins (Fat-Soluble Vitamins)", link: "https://t.me/c/2366096034/4223/5124" }
+            ]
+        },
+        {
+            day: 2, date: "JUNE 21", title: "INTESTINE & PROTEIN METABOLISM", icon: metabolismSvg,
+            lectures: [
+                { id: "L33_A", code: "L33", subject: "Anatomy", title: "Anatomy of Small Intestine & Large Intestine", link: "https://t.me/c/2366096034/4222/4820?single" },
+                { id: "L31_P", code: "L31", subject: "Physiology", title: "Physiology of Small Intestine & Absorption", link: "https://t.me/c/2366096034/4222/4795" },
+                { id: "L34_Pa", code: "L34", subject: "Pathology", title: "Pathology of Pancreatic Diseases & Malabsorption", link: "https://t.me/c/2366096034/4222/4822" },
+                { id: "L37_B", code: "L37", subject: "Biochemistry", title: "General Protein Metabolism", link: "https://t.me/c/2366096034/4222/4859" },
+                { id: "L39_B", code: "L39", subject: "Biochemistry", title: "Conversion of Amino Acids to Specialized Products", link: "https://t.me/c/2366096034/4222/4950" },
+                { id: "L42_Ph", code: "L42", subject: "Pharmacology", title: "Antiemetic Drugs", link: "https://t.me/c/2366096034/4222/4957" }
+            ]
+        },
+        {
+            day: 3, date: "JUNE 22", title: "LIVER, EMBRYOLOGY & LIPIDS", icon: liverSvg,
+            lectures: [
+                { id: "L29_A", code: "L29", subject: "Anatomy", title: "Development of Foregut", link: "https://t.me/c/2366096034/4222/4745" },
+                { id: "L38_A", code: "L38", subject: "Anatomy", title: "Development of Midgut & Hindgut", link: "https://t.me/c/2366096034/4222/4860" },
+                { id: "L26_Pa", code: "L26", subject: "Pathology", title: "Pathology of Liver & Gall Bladder Diseases", link: "https://t.me/c/2366096034/4222/4738" },
+                { id: "L32_B", code: "L32", subject: "Biochemistry", title: "Lipolysis, Fatty Acid Oxidation & Ketone Body Metabolism", link: "https://t.me/c/2366096034/4222/4796" },
+                { id: "L24_M", code: "L24", subject: "Microbiology", title: "Viral Infections of the Liver", link: "https://t.me/c/2366096034/4222/4678" },
+                { id: "L27_Pa", code: "L27", subject: "Parasitology", title: "Hepatointestinal Schistosomiasis", link: "https://t.me/c/2366096034/4222/4742" }
+            ]
+        },
+        {
+            day: 4, date: "JUNE 23", title: "COLON, PERITONEUM & IBD", icon: pillSvg,
+            lectures: [
+                { id: "L35_P", code: "L35", subject: "Physiology", title: "Physiology of Colon (Large Intestine) & Defecation", link: "https://t.me/c/2366096034/4222/4856" },
+                { id: "L41_A", code: "L41", subject: "Anatomy", title: "Anatomy of Peritoneum", link: "https://t.me/c/2366096034/4222/4955" },
+                { id: "L43_Pa", code: "L43", subject: "Pathology", title: "Colon Cancer & Precancerous Lesions", link: "https://t.me/c/2366096034/4222/4971" },
+                { id: "L46_Pa", code: "L46", subject: "Pathology", title: "IBD & Dysentery", link: "https://t.me/c/2366096034/4222/5112" },
+                { id: "L49_Ph", code: "L49", subject: "Pharmacology", title: "Drugs Used in IBD", link: "https://t.me/c/2366096034/4222/5142" },
+                { id: "L48_Ph", code: "L48", subject: "Pharmacology", title: "Purgatives & Antidiarrheal Drugs", link: "https://t.me/c/2366096034/4222/5131" }
+            ]
+        },
+        {
+            day: 5, date: "JUNE 24", title: "INFECTIONS & PARASITES", icon: bacterialSvg,
+            lectures: [
+                { id: "L44_Pa", code: "L44", subject: "Parasitology", title: "Ascariasis, Ancylostomiasis, Strongyloidiasis & Enterobiasis", link: "https://t.me/c/2366096034/4222/4976" },
+                { id: "L47_Pa", code: "L47", subject: "Parasitology", title: "Amoebiasis, Giardiasis & Cryptosporidiosis", link: "https://t.me/c/2366096034/4222/5130" },
+                { id: "L36_Pa", code: "L36", subject: "Parasitology", title: "Fascioliasis & Heterophyiasis", link: "https://t.me/c/2366096034/4222/4858" },
+                { id: "L40_Pa", code: "L40", subject: "Parasitology", title: "Hepatic Hydatidosis, Taeniasis & Hymenolepiasis", link: "https://t.me/c/2366096034/4222/4952" },
+                { id: "L25_M", code: "L25", subject: "Microbiology", title: "Bacterial Infection of the Gastrointestinal Tract Part 2", link: "https://t.me/c/2366096034/4222/4737" },
+                { id: "L45_M", code: "L45", subject: "Microbiology", title: "Bacterial Infections of the Gastrointestinal Tract Part 3", link: "https://t.me/c/2366096034/4222/5111" },
+                { id: "L50_M", code: "L50", subject: "Microbiology", title: "Viral Infections of the Gastrointestinal Tract", link: "https://t.me/c/2366096034/4222/5143" }
+            ]
+        }
+    ];
+
+    // --- نظام الوضع الليلي (Dark Mode) ---
+    const themeToggle = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.innerHTML = '☀️';
+    } else {
+        themeToggle.innerHTML = '🌙';
+    }
+
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        let theme = 'light';
+        if (document.body.classList.contains('dark-mode')) {
+            theme = 'dark';
+            themeToggle.innerHTML = '☀️';
+        } else {
+            themeToggle.innerHTML = '🌙';
+        }
+        localStorage.setItem('theme', theme);
+    });
+
+    // Load saved progress from Local Storage for GIT PAPER 2
+    let savedProgress = JSON.parse(localStorage.getItem('gitProgressPaper2')) || {};
+
+    function saveProgress() {
+        localStorage.setItem('gitProgressPaper2', JSON.stringify(savedProgress));
+        updateProgressBars();
+    }
+
+    function toggleCheckboxes(lecId, rowId) {
+        const lecCheckbox = document.getElementById(lecId);
+        const mcqCheckbox = document.getElementById(lecId + '_mcq');
+        const row = document.getElementById(rowId);
+        
+        savedProgress[lecId] = lecCheckbox.checked;
+        savedProgress[lecId + '_mcq'] = mcqCheckbox.checked;
+        
+        if (lecCheckbox.checked && mcqCheckbox.checked) {
+            row.classList.add('completed');
+        } else {
+            row.classList.remove('completed');
+        }
+        
+        saveProgress();
+    }
+
+    function updateProgressBars() {
+        let totalTasks = 0;
+        let completedTasks = 0;
+
+        scheduleData.forEach(day => {
+            let dayTotalTasks = day.lectures.length * 2;
+            let dayCompletedTasks = 0;
+
+            day.lectures.forEach(lec => {
+                totalTasks += 2;
+                
+                if (savedProgress[lec.id]) {
+                    completedTasks++;
+                    dayCompletedTasks++;
+                }
+                if (savedProgress[lec.id + '_mcq']) {
+                    completedTasks++;
+                    dayCompletedTasks++;
+                }
+            });
+
+            const dayBar = document.getElementById(`day-fill-${day.day}`);
+            if(dayBar) {
+                dayBar.style.width = `${(dayCompletedTasks / dayTotalTasks) * 100}%`;
+            }
+        });
+
+        const overallPercentage = totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+        document.getElementById('overall-percentage').innerText = `${overallPercentage}%`;
+        document.getElementById('overall-fill').style.width = `${overallPercentage}%`;
+    }
+
+    function renderSchedule() {
+        const container = document.getElementById('schedule-container');
+        container.innerHTML = ''; 
+        
+        scheduleData.forEach(day => {
+            let rowsHtml = '';
+            day.lectures.forEach(lec => {
+                const isLecChecked = savedProgress[lec.id] ? 'checked' : '';
+                const isMcqChecked = savedProgress[lec.id + '_mcq'] ? 'checked' : '';
+                const completedClass = (isLecChecked && isMcqChecked) ? 'completed' : '';
+                const subjectClass = `subject-${lec.subject.toLowerCase()}`;
+                
+                rowsHtml += `
+                    <tr id="row-${lec.id}" class="${completedClass}">
+                        <td class="checkbox-cell" title="Mark Lecture as Done">
+                            <input type="checkbox" id="${lec.id}" class="check-lec" ${isLecChecked} 
+                                onchange="toggleCheckboxes('${lec.id}', 'row-${lec.id}')">
+                        </td>
+                        <td class="checkbox-cell" title="Mark MCQs as Done">
+                            <input type="checkbox" id="${lec.id}_mcq" class="check-mcq" ${isMcqChecked} 
+                                onchange="toggleCheckboxes('${lec.id}', 'row-${lec.id}')">
+                        </td>
+                        <td style="font-weight: 600; color: var(--text-muted);">${lec.code}</td>
+                        <td><span class="badge ${subjectClass}">${lec.subject}</span></td>
+                        <td><a href="${lec.link}" target="_blank" class="lecture-link">${lec.title}</a></td>
+                    </tr>
+                `;
+            });
+
+            const dayHTML = `
+                <div class="day-section">
+                    <div class="day-card">
+                        <div class="day-number">DAY ${day.day}</div>
+                        <div class="day-date">${day.date}</div>
+                        <div class="day-icon">${day.icon}</div>
+                        <div class="progress-bar-bg" style="width: 100%; height: 8px; margin-top: 15px;">
+                            <div class="progress-bar-fill" id="day-fill-${day.day}"></div>
+                        </div>
+                    </div>
+                    <div class="schedule-card">
+                        <div class="schedule-header">
+                            <h3>${day.title}</h3>
+                        </div>
+                        <table class="lecture-table">
+                            <thead>
+                                <tr>
+                                    <th>📚 Lec</th>
+                                    <th>✅ MCQ</th>
+                                    <th>Lec. No.</th>
+                                    <th>Subject</th>
+                                    <th>Title (Click to open)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rowsHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += dayHTML;
+        });
+
+        updateProgressBars();
+    }
+
+    // --- نظام الأذكار التلقائي ---
+    const athkar = [
+        "صلِّ على النبي ﷺ",
+        "سبحان الله وبحمده، سبحان الله العظيم",
+        "استغفر الله العظيم وأتوب إليه",
+        "لا حول ولا قوة إلا بالله",
+        "اللهم صلِّ وسلم وبارك على نبينا محمد",
+        "الحمد لله دائمًا وأبدًا",
+        "لا إله إلا أنت سبحانك إني كنت من الظالمين",
+        "حسبي الله لا إله إلا هو عليه توكلت وهو رب العرش العظيم",
+        "قال رسول الله ﷺ: «كلمتان خفيفتان على اللسان، ثقيلتان في الميزان: سبحان الله وبحمده، سبحان الله العظيم»",
+        "اللهم إني أسألك علماً نافعاً، ورزقاً طيباً، وعملاً متقبلاً"
+    ];
+
+    function showThikr() {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        
+        const randomThikr = athkar[Math.floor(Math.random() * athkar.length)];
+        toast.innerText = randomThikr;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 100);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 500);
+        }, 8000);
+    }
+
+    // يظهر كل 5 دقائق
+    setInterval(showThikr, 300000); 
+
+    // أول ذكر بعد 10 ثوانٍ كترحيب
+    setTimeout(showThikr, 10000);
+
+    window.onload = renderSchedule;
+</script>
+
+</body>
+</html>
