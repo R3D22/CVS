@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIT Module Planner - Paper 2</title>
+    <title>Endocrine Module Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -298,7 +298,13 @@
             width: 100%;
         }
 
-        .lecture-link:hover {
+        .lecture-link[href="#"]:hover {
+            text-decoration: none;
+            cursor: default;
+            color: var(--text-dark);
+        }
+
+        .lecture-link:not([href="#"]):hover {
             color: var(--primary-green);
             text-decoration: underline;
         }
@@ -426,8 +432,8 @@
             </div>
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </div>
-        <h1 class="main-title">GASTROINTESTINAL TRACT (GIT) MODULE</h1>
-        <p class="subtitle">PAPER 2 STUDY PLAN: BALANCED 4-DAY ORGANIZATION</p>
+        <h1 class="main-title">ENDOCRINE SYSTEM MODULE</h1>
+        <p class="subtitle">COMPREHENSIVE STUDY PLAN: DAILY ORGANIZATION</p>
     </div>
 
     <div class="overall-progress-container">
@@ -445,86 +451,76 @@
     </div>
 
     <div class="footer">
-        🩺 🔬 💊 🩸 🧬 🧪
+        🩺 🧠 💊 🩸 🧬 🧪
     </div>
 </div>
 
 <div id="toast-container"></div>
 
 <script>
-    // Premium Medical Line-Art SVGs
-    const intestineSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <path d="M16 12C24 12 28 20 36 20C44 20 48 12 56 12C56 12 60 28 56 44C52 60 40 60 36 60C32 60 20 60 16 44C12 28 16 12 16 12Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M22 28C26 32 30 28 34 32" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
-        <path d="M38 44C42 40 46 44 50 40" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
+    // Premium Medical Line-Art SVGs for Endocrine System
+    const pituitarySvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M40 14C34 10 26 10 20 16C16 20 12 28 14 36C16 44 24 50 34 50C44 50 50 44 52 36C54 28 50 18 40 14Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M28 42C28 46 30 48 32 48C34 48 36 46 36 42" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="32" cy="46" r="2" fill="var(--icon-accent)"/>
     </svg>`;
 
-    const metabolismSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <circle cx="32" cy="32" r="20" stroke="var(--icon-color)" stroke-width="2.5"/>
-        <path d="M32 16V48M16 32H48" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="20" cy="20" r="4" fill="var(--icon-accent)"/>
-        <circle cx="44" cy="44" r="4" fill="var(--icon-accent)"/>
+    const thyroidSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M26 12H38M26 20H38M26 44H38M26 52H38" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M26 10V54M38 10V54" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M26 26C20 24 14 26 12 32C10 38 14 46 22 42C24 41 26 38 26 36V26Z" fill="var(--icon-accent)" fill-opacity="0.2" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M38 26C44 24 50 26 52 32C54 38 50 46 42 42C40 41 38 38 38 36V26Z" fill="var(--icon-accent)" fill-opacity="0.2" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M26 36H38V40H26V36Z" fill="var(--icon-accent)" stroke="var(--icon-accent)" stroke-width="2"/>
     </svg>`;
 
-    const liverSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <path d="M10 38C10 26 24 16 42 18C52 19 56 25 54 33C52 42 38 46 28 42C18 38 10 42 10 38Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M32 18C30 25 28 32 28 42" stroke="var(--icon-color)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 3"/>
-    </svg>`;
-
-    const colonPathSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <path d="M20 54V30C20 20 28 14 36 14C48 14 54 22 54 36V48" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M26 54V32C26 24 32 20 38 20C46 20 48 26 48 36V46" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="36" cy="14" r="3" fill="var(--icon-accent)"/>
+    const adrenalSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M14 42C10 36 12 26 20 24C28 22 30 30 26 36C24 39 20 40 18 42C16 43 15 44 14 42Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M50 42C54 36 52 26 44 24C36 22 34 30 38 36C40 39 44 40 46 42C48 43 49 44 50 42Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M14 22L18 14L26 18Z" fill="var(--icon-accent)" stroke="var(--icon-accent)" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M50 22L46 14L38 18Z" fill="var(--icon-accent)" stroke="var(--icon-accent)" stroke-width="2" stroke-linejoin="round"/>
     </svg>`;
 
     const scheduleData = [
         {
-            day: 1, date: "JUNE 20", title: "NUTRITION & HISTOLOGY", icon: intestineSvg,
+            day: 1, date: "JUNE 26", title: "PITUITARY GLAND & METABOLISM", icon: pituitarySvg,
             lectures: [
-                { id: "L28_H", code: "L28", subject: "Histology", title: "Histology of Small Intestine, Large Intestine & Anal Canal", link: "https://t.me/c/2366096034/4222/4744" },
-                { id: "L30_P", code: "L30", subject: "Physiology", title: "Pathophysiology of Nutritional Disorders (Obesity & Starvation)", link: "https://t.me/c/2366096034/4222/4747" },
-                { id: "S1_B", code: "S1", subject: "Biochemistry", title: "Applied Vitamins (Water-Soluble Vitamins)", link: "https://t.me/c/2366096034/4223/4826" },
-                { id: "S2_B", code: "S2", subject: "Biochemistry", title: "Applied Vitamins (Fat-Soluble Vitamins)", link: "https://t.me/c/2366096034/4223/5124" }
+                { id: "L1_A", code: "L1", subject: "Anatomy", title: "Anatomy & Development of the Pituitary Gland", link: "https://t.me/c/2366096034/5428/5441" },
+                { id: "L3_H", code: "L3", subject: "Histology", title: "Structure of Pituitary Gland & Pineal Body", link: "https://t.me/c/2366096034/5428/5459" },
+                { id: "L2_B", code: "L2", subject: "Biochemistry", title: "Hormone Structure & Ligand-Receptor Interactions", link: "https://t.me/c/2366096034/5428/5457" },
+                { id: "L4_P", code: "L4", subject: "Physiology", title: "Introduction & Control + Posterior Pituitary Gland", link: "https://t.me/c/2366096034/5428/5461" },
+                { id: "L5_P", code: "L5", subject: "Physiology", title: "Physiology of Anterior Pituitary Gland + Physiology of Growth", link: "https://t.me/c/2366096034/5428/5465" },
+                { id: "L6_Pa", code: "L6", subject: "Pathology", title: "Pituitary Lesions", link: "https://t.me/c/2366096034/5428/5468" },
+                { id: "S1_P", code: "S1", subject: "Physiology", title: "Metabolic Rate", link: "https://t.me/c/2366096034/5501/5643" },
+                { id: "L15_P", code: "L15", subject: "Physiology", title: "Regulation of Body Temperature", link: "https://t.me/c/2366096034/5428/5625" },
+                { id: "L12_Ph", code: "L12", subject: "Pharmacology", title: "Pharmacology of Thyroid Hormones Related Disorders", link: "https://t.me/c/2366096034/5428/5543" }
             ]
         },
         {
-            day: 2, date: "JUNE 21", title: "INTESTINE, PROTEINS & PARASITOLOGY I", icon: metabolismSvg,
+            day: 2, date: "JUNE 27", title: "THYROID, PARATHYROID & ENDOCRINE PANCREAS", icon: thyroidSvg,
             lectures: [
-                { id: "L33_A", code: "L33", subject: "Anatomy", title: "Anatomy of Small Intestine & Large Intestine", link: "https://t.me/c/2366096034/4222/4820?single" },
-                { id: "L31_P", code: "L31", subject: "Physiology", title: "Physiology of Small Intestine & Absorption", link: "https://t.me/c/2366096034/4222/4795" },
-                { id: "L34_Pa", code: "L34", subject: "Pathology", title: "Pathology of Pancreatic Diseases & Malabsorption", link: "https://t.me/c/2366096034/4222/4822" },
-                { id: "L37_B", code: "L37", subject: "Biochemistry", title: "General Protein Metabolism", link: "https://t.me/c/2366096034/4222/4859" },
-                { id: "L39_B", code: "L39", subject: "Biochemistry", title: "Conversion of Amino Acids to Specialized Products", link: "https://t.me/c/2366096034/4222/4950" },
-                { id: "L42_Ph", code: "L42", subject: "Pharmacology", title: "Antiemetic Drugs", link: "https://t.me/c/2366096034/4222/4957" },
-                { id: "L25_M", code: "L25", subject: "Microbiology", title: "Bacterial Infection of the Gastrointestinal Tract Part 2", link: "https://t.me/c/2366096034/4222/4737" },
-                { id: "L47_Pa", code: "L47", subject: "Parasitology", title: "Amoebiasis, Giardiasis & Cryptosporidiosis", link: "https://t.me/c/2366096034/4222/5130" },
-                { id: "L27_Pa", code: "L27", subject: "Parasitology", title: "Hepatointestinal Schistosomiasis", link: "https://t.me/c/2366096034/4222/4742" }
+                { id: "L8_A", code: "L8", subject: "Anatomy", title: "Anatomy & Development of the Thyroid and Parathyroid Glands", link: "https://t.me/c/2366096034/5428/5471" },
+                { id: "L9_H", code: "L9", subject: "Histology", title: "Structure of Thyroid & Parathyroid Glands", link: "https://t.me/c/2366096034/5428/5538" },
+                { id: "L7_B", code: "L7", subject: "Biochemistry", title: "Thyroid Hormone Synthesis & Metabolism", link: "https://t.me/c/2366096034/5428/5470" },
+                { id: "L10_P", code: "L10", subject: "Physiology", title: "Physiology of Thyroid Gland", link: "https://t.me/c/2366096034/5428/5539" },
+                { id: "L17_P", code: "L17", subject: "Physiology", title: "Endocrine Regulation of Ca & Ph Metabolism", link: "https://t.me/c/2366096034/5428/5629" },
+                { id: "L11_Pa", code: "L11", subject: "Pathology", title: "Thyroid Lesions", link: "https://t.me/c/2366096034/5428/5542" },
+                { id: "L18_P", code: "L18", subject: "Physiology", title: "Endocrine Regulation of Blood Glucose", link: "https://t.me/c/2366096034/5428/5651" },
+                { id: "L19_Pa", code: "L19", subject: "Pathology", title: "Pathology of Endocrine Pancreas", link: "https://t.me/c/2366096034/5428/5653" },
+                { id: "L16_Ph", code: "L16", subject: "Pharmacology", title: "Anti-diabetic Drugs (Insulin)", link: "https://t.me/c/2366096034/5428/5626" }
             ]
         },
         {
-            day: 3, date: "JUNE 22", title: "LIVER, EMBRYOLOGY & PARASITOLOGY II", icon: liverSvg,
+            day: 3, date: "JUNE 28", title: "ADRENAL GLAND & PHARMACOLOGY", icon: adrenalSvg,
             lectures: [
-                { id: "L29_A", code: "L29", subject: "Anatomy", title: "Development of Foregut", link: "https://t.me/c/2366096034/4222/4745" },
-                { id: "L38_A", code: "L38", subject: "Anatomy", title: "Development of Midgut & Hindgut", link: "https://t.me/c/2366096034/4222/4860" },
-                { id: "L26_Pa", code: "L26", subject: "Pathology", title: "Pathology of Liver & Gall Bladder Diseases", link: "https://t.me/c/2366096034/4222/4738" },
-                { id: "L32_B", code: "L32", subject: "Biochemistry", title: "Lipolysis, Fatty Acid Oxidation & Ketone Body Metabolism", link: "https://t.me/c/2366096034/4222/4796" },
-                { id: "L24_M", code: "L24", subject: "Microbiology", title: "Viral Infections of the Liver", link: "https://t.me/c/2366096034/4222/4678" },
-                { id: "L48_Ph", code: "L48", subject: "Pharmacology", title: "Purgatives & Antidiarrheal Drugs", link: "https://t.me/c/2366096034/4222/5131" },
-                { id: "L36_Pa", code: "L36", subject: "Parasitology", title: "Fascioliasis & Heterophyiasis", link: "https://t.me/c/2366096034/4222/4858" },
-                { id: "L40_Pa", code: "L40", subject: "Parasitology", title: "Hepatic Hydatidosis, Taeniasis & Hymenolepiasis", link: "https://t.me/c/2366096034/4222/4952" }
-            ]
-        },
-        {
-            day: 4, date: "JUNE 23", title: "COLON, IBD & HEAVY NEMATODES", icon: colonPathSvg,
-            lectures: [
-                { id: "L41_A", code: "L41", subject: "Anatomy", title: "Anatomy of Peritoneum", link: "https://t.me/c/2366096034/4222/4955" },
-                { id: "L35_P", code: "L35", subject: "Physiology", title: "Physiology of Colon (Large Intestine) & Defecation", link: "https://t.me/c/2366096034/4222/4856" },
-                { id: "L43_Pa", code: "L43", subject: "Pathology", title: "Colon Cancer & Precancerous Lesions", link: "https://t.me/c/2366096034/4222/4971" },
-                { id: "L46_Pa", code: "L46", subject: "Pathology", title: "IBD & Dysentery", link: "https://t.me/c/2366096034/4222/5112" },
-                { id: "L49_Ph", code: "L49", subject: "Pharmacology", title: "Drugs Used in IBD", link: "https://t.me/c/2366096034/4222/5142" },
-                { id: "L45_M", code: "L45", subject: "Microbiology", title: "Bacterial Infections of the Gastrointestinal Tract Part 3", link: "https://t.me/c/2366096034/4222/5111" },
-                { id: "L50_M", code: "L50", subject: "Microbiology", title: "Viral Infections of the Gastrointestinal Tract", link: "https://t.me/c/2366096034/4222/5143" },
-                { id: "L44_Pa", code: "L44", subject: "Parasitology", title: "Ascariasis, Ancylostomiasis, Strongyloidiasis & Enterobiasis", link: "https://t.me/c/2366096034/4222/4976" }
+                { id: "L21_Ph", code: "L21", subject: "Pharmacology", title: "Anti-diabetic Drugs (Oral Anti-diabetics)", link: "https://t.me/c/2366096034/5428/5664" },
+                { id: "L13_A", code: "L13", subject: "Anatomy", title: "Anatomy & Development of the Pancreas & Suprarenal Gland", link: "https://t.me/c/2366096034/5428/5576" },
+                { id: "L14_H", code: "L14", subject: "Histology", title: "Structure of Adrenal Gland & DNES (Types & Structure)", link: "https://t.me/c/2366096034/5428/5584" },
+                { id: "S2_B", code: "S2", subject: "Biochemistry", title: "Adrenal Hormone Synthesis & Metabolism", link: "https://t.me/c/2366096034/5501/5648" },
+                { id: "L20_P", code: "L20", subject: "Physiology", title: "Physiology of Adrenal Cortex", link: "https://t.me/c/2366096034/5428/5654" },
+                { id: "L22_P", code: "L22", subject: "Physiology", title: "Physiology of Adrenal Medulla", link: "https://t.me/c/2366096034/5428/5665" },
+                { id: "L23_Pa", code: "L23", subject: "Pathology", title: "Pathology of Adrenal Lesions", link: "https://t.me/c/2366096034/5428/5690" },
+                { id: "L24_Ph", code: "L24", subject: "Pharmacology", title: "Pharmacology of Adrenocortical Steroids (Glucocorticoids + Mineralocorticoids)", link: "https://t.me/c/2366096034/5428/5691" },
+                { id: "S3_P", code: "S3", subject: "Physiology", title: "Energy Required During Exercise", link: "#" }
             ]
         }
     ];
@@ -552,11 +548,11 @@
         localStorage.setItem('theme', theme);
     });
 
-    // Load saved progress from Local Storage for GIT PAPER 2
-    let savedProgress = JSON.parse(localStorage.getItem('gitProgressPaper2')) || {};
+    // Load saved progress from Local Storage for ENDOCRINE MODULE
+    let savedProgress = JSON.parse(localStorage.getItem('endoProgress')) || {};
 
     function saveProgress() {
-        localStorage.setItem('gitProgressPaper2', JSON.stringify(savedProgress));
+        localStorage.setItem('endoProgress', JSON.stringify(savedProgress));
         updateProgressBars();
     }
 
