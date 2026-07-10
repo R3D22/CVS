@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Endocrine Module Planner</title>
+    <title>CVS Module Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,8 +17,8 @@
             --text-muted: #666666;
             --hover-bg: #f4f7f5;
             --progress-bg: #e9ecef;
-            --icon-color: #145a32;
-            --icon-accent: #e67e22;
+            --icon-color: #b71c1c; 
+            --icon-accent: #e53935;
             
             /* Subject Colors - Light */
             --c-anatomy: #e8f5e9; --t-anatomy: #2e7d32;
@@ -28,22 +28,21 @@
             --c-microbiology: #e0f2f1; --t-microbiology: #00796b;
             --c-pharmacology: #ffebee; --t-pharmacology: #c62828;
             --c-parasitology: #fffde7; --t-parasitology: #fbc02d;
-            --c-biochemistry: #e8eaf6; --t-biochemistry: #3f51b5; /* Elegant Indigo */
+            --c-biochemistry: #e8eaf6; --t-biochemistry: #3f51b5; 
         }
 
-        /* Dark Mode Variables */
         body.dark-mode {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
-            --primary-green: #4caf50;
+            --primary-green: #e53935; 
             --mcq-orange: #f39c12;
             --border-color: #333333;
             --text-dark: #f5f5f5;
             --text-muted: #aaaaaa;
             --hover-bg: #2a2a2a;
             --progress-bg: #333333;
-            --icon-color: #4caf50;
-            --icon-accent: #f39c12;
+            --icon-color: #ef5350;
+            --icon-accent: #ff8a80;
             
             /* Subject Colors - Dark */
             --c-anatomy: rgba(46, 125, 50, 0.2);     --t-anatomy: #81c784;
@@ -77,7 +76,6 @@
             padding-bottom: 40px;
         }
 
-        /* Header Styles */
         .header {
             margin-bottom: 40px;
             padding-bottom: 20px;
@@ -135,7 +133,6 @@
             margin-bottom: 10px;
         }
 
-        /* Overall Progress */
         .overall-progress-container {
             background: var(--card-bg);
             padding: 20px;
@@ -169,7 +166,6 @@
             transition: width 0.5s ease-in-out, background-color 0.3s ease;
         }
 
-        /* Day Layout */
         .day-section {
             display: grid;
             grid-template-columns: 280px 1fr;
@@ -204,6 +200,7 @@
         .day-date {
             color: var(--text-muted);
             margin-bottom: 15px;
+            font-weight: 500;
         }
 
         .day-icon {
@@ -238,7 +235,6 @@
             font-size: 1.3rem;
         }
 
-        /* Table Styles */
         .lecture-table {
             width: 100%;
             border-collapse: collapse;
@@ -288,7 +284,6 @@
         .check-lec { accent-color: var(--primary-green); }
         .check-mcq { accent-color: var(--mcq-orange); }
 
-        /* Lecture Links */
         .lecture-link {
             color: var(--text-dark);
             text-decoration: none;
@@ -309,7 +304,6 @@
             text-decoration: underline;
         }
 
-        /* Subject Badges */
         .badge {
             padding: 4px 10px;
             border-radius: 20px;
@@ -328,7 +322,6 @@
         .subject-parasitology { background-color: var(--c-parasitology); color: var(--t-parasitology); }
         .subject-biochemistry { background-color: var(--c-biochemistry); color: var(--t-biochemistry); }
 
-        /* Footer */
         .footer {
             text-align: center;
             margin-top: 50px;
@@ -339,7 +332,6 @@
             letter-spacing: 10px;
         }
 
-        /* Toast Notifications Styles */
         #toast-container {
             position: fixed;
             bottom: 30px;
@@ -371,7 +363,6 @@
             transform: translateX(0);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .day-section {
                 grid-template-columns: 1fr;
@@ -432,8 +423,8 @@
             </div>
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </div>
-        <h1 class="main-title">ENDOCRINE SYSTEM MODULE</h1>
-        <p class="subtitle">COMPREHENSIVE STUDY PLAN: DAILY ORGANIZATION</p>
+        <h1 class="main-title">CARDIOVASCULAR SYSTEM (CVS)</h1>
+        <p class="subtitle">COMPREHENSIVE STUDY PLAN: WEEKLY ORGANIZATION</p>
     </div>
 
     <div class="overall-progress-container">
@@ -451,81 +442,128 @@
     </div>
 
     <div class="footer">
-        🩺 🧠 💊 🩸 🧬 🧪
+        ❤️ 🫀 🩸 🩺 💊 🔬
     </div>
 </div>
 
 <div id="toast-container"></div>
 
 <script>
-    // Premium Medical Line-Art SVGs for Endocrine System
-    const pituitarySvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <path d="M40 14C34 10 26 10 20 16C16 20 12 28 14 36C16 44 24 50 34 50C44 50 50 44 52 36C54 28 50 18 40 14Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M28 42C28 46 30 48 32 48C34 48 36 46 36 42" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="32" cy="46" r="2" fill="var(--icon-accent)"/>
+    // Week 1: Anatomical Heart Structure
+    const heartAnatomySvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M30 20C24 16 16 18 12 24C8 32 16 42 32 54C48 42 56 32 52 24C48 18 40 16 34 20" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 20V8M26 12L32 8L38 12" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M42 22C46 22 50 20 54 16" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M22 22C18 22 14 20 10 16" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
     </svg>`;
 
-    const thyroidSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <path d="M26 12H38M26 20H38M26 44H38M26 52H38" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round"/>
-        <path d="M26 10V54M38 10V54" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round"/>
-        <path d="M26 26C20 24 14 26 12 32C10 38 14 46 22 42C24 41 26 38 26 36V26Z" fill="var(--icon-accent)" fill-opacity="0.2" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M38 26C44 24 50 26 52 32C54 38 50 46 42 42C40 41 38 38 38 36V26Z" fill="var(--icon-accent)" fill-opacity="0.2" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M26 36H38V40H26V36Z" fill="var(--icon-accent)" stroke="var(--icon-accent)" stroke-width="2"/>
+    // Week 2: ECG Heartbeat & Rhythm
+    const ecgSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M32 54C48 42 56 32 52 24C48 16 36 16 32 24C28 16 16 16 12 24C8 32 16 42 32 54Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M8 32H16L20 22L28 46L36 14L44 38L48 32H56" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
 
-    const adrenalSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
-        <path d="M14 42C10 36 12 26 20 24C28 22 30 30 26 36C24 39 20 40 18 42C16 43 15 44 14 42Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M50 42C54 36 52 26 44 24C36 22 34 30 38 36C40 39 44 40 46 42C48 43 49 44 50 42Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M14 22L18 14L26 18Z" fill="var(--icon-accent)" stroke="var(--icon-accent)" stroke-width="2" stroke-linejoin="round"/>
-        <path d="M50 22L46 14L38 18Z" fill="var(--icon-accent)" stroke="var(--icon-accent)" stroke-width="2" stroke-linejoin="round"/>
+    // Week 3: Blood Vessel & Lipids
+    const vesselSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <circle cx="32" cy="32" r="20" stroke="var(--icon-color)" stroke-width="3"/>
+        <circle cx="32" cy="32" r="12" stroke="var(--icon-color)" stroke-width="2" stroke-dasharray="4 4"/>
+        <path d="M22 32C22 26.4772 26.4772 22 32 22V42C26.4772 42 22 37.5228 22 32Z" fill="var(--icon-accent)" fill-opacity="0.6"/>
+        <circle cx="40" cy="32" r="3" fill="var(--icon-accent)"/>
+        <circle cx="36" cy="26" r="2" fill="var(--icon-accent)"/>
+    </svg>`;
+
+    // Week 4: Blood Pressure
+    const bpGaugeSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <circle cx="32" cy="28" r="20" stroke="var(--icon-color)" stroke-width="3"/>
+        <circle cx="32" cy="28" r="4" fill="var(--icon-accent)"/>
+        <path d="M32 28L42 18" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M18 28H14M50 28H46M32 14V10M32 46V42M22 18L19 15M42 38L45 41M22 38L19 41M42 18L45 15" stroke="var(--icon-color)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M32 48V58C32 60 36 62 40 62H48" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+
+    // Week 5: Circulation Loop
+    const circulationSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M22 32C22 20 42 20 42 32C42 44 22 44 22 32Z" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M22 32C10 32 10 16 22 16M42 32C54 32 54 48 42 48" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M20 12L24 16L20 20M44 44L40 48L44 52" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
 
     const scheduleData = [
         {
-            day: 1, date: "JUNE 26", title: "PITUITARY GLAND & METABOLISM", icon: pituitarySvg,
+            week: 1, icon: heartAnatomySvg,
             lectures: [
-                { id: "L1_A", code: "L1", subject: "Anatomy", title: "Anatomy & Development of the Pituitary Gland", link: "https://t.me/c/2366096034/5428/5441" },
-                { id: "L3_H", code: "L3", subject: "Histology", title: "Structure of Pituitary Gland & Pineal Body", link: "https://t.me/c/2366096034/5428/5459" },
-                { id: "L2_B", code: "L2", subject: "Biochemistry", title: "Hormone Structure & Ligand-Receptor Interactions", link: "https://t.me/c/2366096034/5428/5457" },
-                { id: "L4_P", code: "L4", subject: "Physiology", title: "Introduction & Control + Posterior Pituitary Gland", link: "https://t.me/c/2366096034/5428/5461" },
-                { id: "L5_P", code: "L5", subject: "Physiology", title: "Physiology of Anterior Pituitary Gland + Physiology of Growth", link: "https://t.me/c/2366096034/5428/5465" },
-                { id: "L6_Pa", code: "L6", subject: "Pathology", title: "Pituitary Lesions", link: "https://t.me/c/2366096034/5428/5468" },
-                { id: "S1_P", code: "S1", subject: "Physiology", title: "Metabolic Rate", link: "https://t.me/c/2366096034/5501/5643" },
-                { id: "L15_P", code: "L15", subject: "Physiology", title: "Regulation of Body Temperature", link: "https://t.me/c/2366096034/5428/5625" },
-                { id: "L12_Ph", code: "L12", subject: "Pharmacology", title: "Pharmacology of Thyroid Hormones Related Disorders", link: "https://t.me/c/2366096034/5428/5543" }
+                { id: "L1_A", code: "L1", subject: "Anatomy", title: "Pericardium & External Features of the Heart - Powerpoint", link: "#" },
+                { id: "L2_P", code: "L2", subject: "Physiology", title: "Introduction to Cardiovascular System (CVS)", link: "#" },
+                { id: "L3_Pa", code: "L3", subject: "Pathology", title: "Myocarditis & Pericarditis - Handout", link: "#" },
+                { id: "L4_A", code: "L4", subject: "Anatomy", title: "Internal Features of the Heart - Powerpoint", link: "#" },
+                { id: "L5_P", code: "L5", subject: "Physiology", title: "Cardiac properties ( Rhythmicity & Conductivity )", link: "#" },
+                { id: "L6_H", code: "L6", subject: "Histology", title: "Histology of the Heart", link: "#" },
+                { id: "L7_P", code: "L7", subject: "Physiology", title: "Cardiac properties ( Excitability & Contractility )", link: "#" },
+                { id: "L8_A", code: "L8", subject: "Anatomy", title: "Blood Supply of the Heart & Great Vessels - Powerpoint", link: "#" },
+                { id: "L9_P", code: "L9", subject: "Physiology", title: "Cardiac Cycle", link: "#" },
+                { id: "L10_Pa", code: "L10", subject: "Pathology", title: "Endocarditis & Hypertension - Handout", link: "#" },
+                { id: "L11_P", code: "L11", subject: "Physiology", title: "Application of the Cardiac Cycle", link: "#" },
+                { id: "L12_Ph", code: "L12", subject: "Pharmacology", title: "Antiarrhythmic Drugs", link: "#" }
             ]
         },
         {
-            day: 2, date: "JUNE 27", title: "THYROID, PARATHYROID & ENDOCRINE PANCREAS", icon: thyroidSvg,
+            week: 2, icon: ecgSvg,
             lectures: [
-                { id: "L8_A", code: "L8", subject: "Anatomy", title: "Anatomy & Development of the Thyroid and Parathyroid Glands", link: "https://t.me/c/2366096034/5428/5471" },
-                { id: "L9_H", code: "L9", subject: "Histology", title: "Structure of Thyroid & Parathyroid Glands", link: "https://t.me/c/2366096034/5428/5538" },
-                { id: "L7_B", code: "L7", subject: "Biochemistry", title: "Thyroid Hormone Synthesis & Metabolism", link: "https://t.me/c/2366096034/5428/5470" },
-                { id: "L10_P", code: "L10", subject: "Physiology", title: "Physiology of Thyroid Gland", link: "https://t.me/c/2366096034/5428/5539" },
-                { id: "L17_P", code: "L17", subject: "Physiology", title: "Endocrine Regulation of Ca & Ph Metabolism", link: "https://t.me/c/2366096034/5428/5629" },
-                { id: "L11_Pa", code: "L11", subject: "Pathology", title: "Thyroid Lesions", link: "https://t.me/c/2366096034/5428/5542" },
-                { id: "L18_P", code: "L18", subject: "Physiology", title: "Endocrine Regulation of Blood Glucose", link: "https://t.me/c/2366096034/5428/5651" },
-                { id: "L19_Pa", code: "L19", subject: "Pathology", title: "Pathology of Endocrine Pancreas", link: "https://t.me/c/2366096034/5428/5653" },
-                { id: "L16_Ph", code: "L16", subject: "Pharmacology", title: "Anti-diabetic Drugs (Insulin)", link: "https://t.me/c/2366096034/5428/5626" }
+                { id: "L13_A", code: "L13", subject: "Anatomy", title: "Mediastinum and Great Vessels - Powerpoint", link: "#" },
+                { id: "L14_Ph", code: "L14", subject: "Pharmacology", title: "Management of Heart Failure", link: "#" },
+                { id: "L15_M", code: "L15", subject: "Microbiology", title: "Infection of Cardiovascular System", link: "#" },
+                { id: "L16_P", code: "L16", subject: "Physiology", title: "Heart Rate & Its Regulation", link: "#" },
+                { id: "L17_P", code: "L17", subject: "Physiology", title: "Cardiac Output & Factors Affecting It", link: "#" },
+                { id: "L18_A", code: "L18", subject: "Anatomy", title: "Vessels of Head & Neck - Powerpoint", link: "#" },
+                { id: "L19_Ph", code: "L19", subject: "Pharmacology", title: "Positive Inotropic Factors", link: "#" },
+                { id: "L20_Pa", code: "L20", subject: "Pathology", title: "Rheumatic Fever - Handout", link: "#" },
+                { id: "L21_P", code: "L21", subject: "Physiology", title: "Cardiac Output Regulation & Cardiac Reserve", link: "#" },
+                { id: "L22_Pa", code: "L22", subject: "Parasitology", title: "Chagas Disease", link: "#" }
             ]
         },
         {
-            day: 3, date: "JUNE 28", title: "ADRENAL GLAND & PHARMACOLOGY", icon: adrenalSvg,
+            week: 3, icon: vesselSvg,
             lectures: [
-                { id: "L21_Ph", code: "L21", subject: "Pharmacology", title: "Anti-diabetic Drugs (Oral Anti-diabetics)", link: "https://t.me/c/2366096034/5428/5664" },
-                { id: "L13_A", code: "L13", subject: "Anatomy", title: "Anatomy & Development of the Pancreas & Suprarenal Gland", link: "https://t.me/c/2366096034/5428/5576" },
-                { id: "L14_H", code: "L14", subject: "Histology", title: "Structure of Adrenal Gland & DNES (Types & Structure)", link: "https://t.me/c/2366096034/5428/5584" },
-                { id: "S2_B", code: "S2", subject: "Biochemistry", title: "Adrenal Hormone Synthesis & Metabolism", link: "https://t.me/c/2366096034/5501/5648" },
-                { id: "L20_P", code: "L20", subject: "Physiology", title: "Physiology of Adrenal Cortex", link: "https://t.me/c/2366096034/5428/5654" },
-                { id: "L22_P", code: "L22", subject: "Physiology", title: "Physiology of Adrenal Medulla", link: "https://t.me/c/2366096034/5428/5665" },
-                { id: "L23_Pa", code: "L23", subject: "Pathology", title: "Pathology of Adrenal Lesions", link: "https://t.me/c/2366096034/5428/5690" },
-                { id: "L24_Ph", code: "L24", subject: "Pharmacology", title: "Pharmacology of Adrenocortical Steroids (Glucocorticoids + Mineralocorticoids)", link: "https://t.me/c/2366096034/5428/5691" },
-                { id: "S3_P", code: "S3", subject: "Physiology", title: "Energy Required During Exercise", link: "#" }
+                { id: "L23_Pa", code: "L23", subject: "Pathology", title: "Cardiomyopathy", link: "#" },
+                { id: "L24_B", code: "L24", subject: "Biochemistry", title: "Cholesterol Synthesis & Metabolism", link: "#" },
+                { id: "L25_P", code: "L25", subject: "Physiology", title: "Tissue Blood Flow & Arteriolar Diameter", link: "#" },
+                { id: "L26_H", code: "L26", subject: "Histology", title: "Structure of Blood Vessels & Microvasculature", link: "#" },
+                { id: "L27_P", code: "L27", subject: "Physiology", title: "Arterial Blood Pressure & Factors Affecting It", link: "#" },
+                { id: "L28_B", code: "L28", subject: "Biochemistry", title: "Lipoproteins", link: "#" },
+                { id: "L29_Pa", code: "L29", subject: "Pathology", title: "Ischemic Heart Disease - Handout", link: "#" },
+                { id: "L30_Ph", code: "L30", subject: "Pharmacology", title: "Antianginal Drugs & Drug Treatment of Acute Myocardial Infarction", link: "#" }
+            ]
+        },
+        {
+            week: 4, icon: bpGaugeSvg,
+            lectures: [
+                { id: "L31_P", code: "L31", subject: "Physiology", title: "Regulation of Arterial Blood Pressure", link: "#" },
+                { id: "L32_B", code: "L32", subject: "Biochemistry", title: "Diagnostic Cardiac Enzymes", link: "#" },
+                { id: "L33_Ph", code: "L33", subject: "Pharmacology", title: "Drug Treatment of Hypertension", link: "#" },
+                { id: "L34_P", code: "L34", subject: "Physiology", title: "Functional Characteristics of Special Circulation", link: "#" },
+                { id: "L35_Ph", code: "L35", subject: "Pharmacology", title: "Vasodilator Drugs", link: "#" },
+                { id: "L36_Pa", code: "L36", subject: "Pathology", title: "Arteritis & Atherosclerosis - Handout", link: "#" },
+                { id: "L37_P", code: "L37", subject: "Physiology", title: "Capillary Circulation", link: "#" },
+                { id: "L38_A", code: "L38", subject: "Anatomy", title: "Development of CVS Part 1 - Powerpoint", link: "#" }
+            ]
+        },
+        {
+            week: 5, icon: circulationSvg,
+            lectures: [
+                { id: "L39_Pa", code: "L39", subject: "Pathology", title: "CVS Tumor", link: "#" },
+                { id: "L40_P", code: "L40", subject: "Physiology", title: "Venous, Lymphatic Circulation & Oedema", link: "#" },
+                { id: "L41_A", code: "L41", subject: "Anatomy", title: "Development of CVS Part 2 -  Powerpoint", link: "#" },
+                { id: "L42_P", code: "L42", subject: "Physiology", title: "Physiological Response to Exercise", link: "#" },
+                { id: "L43_B", code: "L43", subject: "Biochemistry", title: "Hyperlipidaemia", link: "#" },
+                { id: "L44_Ph", code: "L44", subject: "Pharmacology", title: "Management of Cardiogenic Pulmonary Shock", link: "#" },
+                { id: "L45_Ph", code: "L45", subject: "Pharmacology", title: "Drug Treatment for Hyperlipidaemia", link: "#" },
+                { id: "L46_Pa", code: "L46", subject: "Parasitology", title: "Cardiac Parasitosis", link: "#" },
+                { id: "L47_P", code: "L47", subject: "Physiology", title: "Physiological Response to Shock & Haemorrhage", link: "#" },
+                { id: "L48_A", code: "L48", subject: "Anatomy", title: "Development of Arteries - Powerpoint", link: "#" }
             ]
         }
     ];
 
-    // --- نظام الوضع الليلي (Dark Mode) ---
     const themeToggle = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme') || 'light';
     
@@ -548,11 +586,10 @@
         localStorage.setItem('theme', theme);
     });
 
-    // Load saved progress from Local Storage for ENDOCRINE MODULE
-    let savedProgress = JSON.parse(localStorage.getItem('endoProgress')) || {};
+    let savedProgress = JSON.parse(localStorage.getItem('cvsProgress')) || {};
 
     function saveProgress() {
-        localStorage.setItem('endoProgress', JSON.stringify(savedProgress));
+        localStorage.setItem('cvsProgress', JSON.stringify(savedProgress));
         updateProgressBars();
     }
 
@@ -577,26 +614,26 @@
         let totalTasks = 0;
         let completedTasks = 0;
 
-        scheduleData.forEach(day => {
-            let dayTotalTasks = day.lectures.length * 2;
-            let dayCompletedTasks = 0;
+        scheduleData.forEach(weekData => {
+            let weekTotalTasks = weekData.lectures.length * 2;
+            let weekCompletedTasks = 0;
 
-            day.lectures.forEach(lec => {
+            weekData.lectures.forEach(lec => {
                 totalTasks += 2;
                 
                 if (savedProgress[lec.id]) {
                     completedTasks++;
-                    dayCompletedTasks++;
+                    weekCompletedTasks++;
                 }
                 if (savedProgress[lec.id + '_mcq']) {
                     completedTasks++;
-                    dayCompletedTasks++;
+                    weekCompletedTasks++;
                 }
             });
 
-            const dayBar = document.getElementById(`day-fill-${day.day}`);
-            if(dayBar) {
-                dayBar.style.width = `${(dayCompletedTasks / dayTotalTasks) * 100}%`;
+            const weekBar = document.getElementById(`week-fill-${weekData.week}`);
+            if(weekBar) {
+                weekBar.style.width = `${(weekCompletedTasks / weekTotalTasks) * 100}%`;
             }
         });
 
@@ -609,9 +646,9 @@
         const container = document.getElementById('schedule-container');
         container.innerHTML = ''; 
         
-        scheduleData.forEach(day => {
+        scheduleData.forEach(weekData => {
             let rowsHtml = '';
-            day.lectures.forEach(lec => {
+            weekData.lectures.forEach(lec => {
                 const isLecChecked = savedProgress[lec.id] ? 'checked' : '';
                 const isMcqChecked = savedProgress[lec.id + '_mcq'] ? 'checked' : '';
                 const completedClass = (isLecChecked && isMcqChecked) ? 'completed' : '';
@@ -634,20 +671,18 @@
                 `;
             });
 
-            const dayHTML = `
+            const weekCount = weekData.lectures.length;
+            const weekHTML = `
                 <div class="day-section">
                     <div class="day-card">
-                        <div class="day-number">DAY ${day.day}</div>
-                        <div class="day-date">${day.date}</div>
-                        <div class="day-icon">${day.icon}</div>
+                        <div class="day-number">WEEK ${weekData.week}</div>
+                        <div class="day-date">${weekCount} Lectures</div>
+                        <div class="day-icon">${weekData.icon}</div>
                         <div class="progress-bar-bg" style="width: 100%; height: 8px; margin-top: 15px;">
-                            <div class="progress-bar-fill" id="day-fill-${day.day}"></div>
+                            <div class="progress-bar-fill" id="week-fill-${weekData.week}"></div>
                         </div>
                     </div>
                     <div class="schedule-card">
-                        <div class="schedule-header">
-                            <h3>${day.title}</h3>
-                        </div>
                         <table class="lecture-table">
                             <thead>
                                 <tr>
@@ -665,13 +700,12 @@
                     </div>
                 </div>
             `;
-            container.innerHTML += dayHTML;
+            container.innerHTML += weekHTML;
         });
 
         updateProgressBars();
     }
 
-    // --- نظام الأذكار التلقائي ---
     const athkar = [
         "صلِّ على النبي ﷺ",
         "سبحان الله وبحمده، سبحان الله العظيم",
@@ -709,12 +743,13 @@
         }, 8000);
     }
 
-    // يظهر كل 5 دقائق
+    // Show toast every 5 minutes
     setInterval(showThikr, 300000); 
 
-    // أول ذكر بعد 10 ثوانٍ كترحيب
+    // First toast after 10 seconds
     setTimeout(showThikr, 10000);
 
+    // Initial render
     window.onload = renderSchedule;
 </script>
 
