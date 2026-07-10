@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CVS Module Planner</title>
+    <title>Medical Modules Planner</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -55,6 +55,18 @@
             --c-biochemistry: rgba(63, 81, 181, 0.2); --t-biochemistry: #9fa8da;
         }
 
+        /* Responsive Respiratory Color Overrides in Dark Mode */
+        body.dark-mode.theme-resp {
+            --primary-green: #0288d1;
+            --icon-color: #03a9f4;
+            --icon-accent: #81d4fa;
+        }
+        body.theme-resp {
+            --primary-green: #01579b;
+            --icon-color: #0277bd;
+            --icon-accent: #039be5;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -77,10 +89,11 @@
         }
 
         .header {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid var(--primary-green);
             position: relative;
+            transition: border-color 0.3s ease;
         }
 
         .header-top {
@@ -125,12 +138,48 @@
             color: var(--primary-green);
             font-weight: 700;
             margin-top: 15px;
+            transition: color 0.3s ease;
         }
 
         .subtitle {
             font-size: 1.2rem;
             color: var(--text-muted);
             margin-bottom: 10px;
+        }
+
+        /* Tabs Styling */
+        .module-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary-green);
+            color: var(--text-dark);
+        }
+
+        .tab-btn.active {
+            border-color: var(--primary-green);
+            background: var(--primary-green);
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .overall-progress-container {
@@ -171,6 +220,12 @@
             grid-template-columns: 280px 1fr;
             gap: 24px;
             margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .day-card {
@@ -195,6 +250,7 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--primary-green);
+            transition: color 0.3s ease;
         }
 
         .day-date {
@@ -219,20 +275,7 @@
             padding: 24px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03);
             transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .schedule-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 15px;
-        }
-
-        .schedule-header h3 {
-            color: var(--primary-green);
-            font-size: 1.3rem;
+            overflow-x: auto;
         }
 
         .lecture-table {
@@ -332,7 +375,7 @@
             letter-spacing: 10px;
         }
 
-        /* Toast Notifications Styles */
+        /* Toast Notifications Styles (Teal Color) */
         #toast-container {
             position: fixed;
             bottom: 30px;
@@ -344,7 +387,7 @@
         }
 
         .toast {
-            background-color: #0f766e; /* لون تيل هادي بعيد عن الأحمر */
+            background-color: #0f766e; /* Teal */
             color: white;
             padding: 16px 24px;
             border-radius: 12px;
@@ -424,8 +467,15 @@
             </div>
             <button id="theme-toggle" class="theme-toggle">🌙</button>
         </div>
-        <h1 class="main-title">CARDIOVASCULAR SYSTEM (CVS)</h1>
-        <p class="subtitle">COMPREHENSIVE STUDY PLAN: WEEKLY ORGANIZATION</p>
+        
+        <h1 id="page-main-title" class="main-title">CARDIOVASCULAR SYSTEM (CVS)</h1>
+        <p id="page-subtitle" class="subtitle">COMPREHENSIVE STUDY PLAN: WEEKLY ORGANIZATION</p>
+    </div>
+
+    <!-- TABS SECTION -->
+    <div class="module-tabs">
+        <button id="tab-cvs" class="tab-btn active" onclick="switchModule('cvs')">❤️ CVS Module</button>
+        <button id="tab-resp" class="tab-btn" onclick="switchModule('resp')">🫁 Respiratory Module</button>
     </div>
 
     <div class="overall-progress-container">
@@ -442,7 +492,7 @@
         <!-- Content will be generated by JavaScript -->
     </div>
 
-    <div class="footer">
+    <div id="footer-icons" class="footer">
         ❤️ 🫀 🩸 🩺 💊 🔬
     </div>
 </div>
@@ -450,7 +500,7 @@
 <div id="toast-container"></div>
 
 <script>
-    // Week 1: Anatomical Heart Structure
+    // --- CVS SVGs ---
     const heartAnatomySvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
         <path d="M30 20C24 16 16 18 12 24C8 32 16 42 32 54C48 42 56 32 52 24C48 18 40 16 34 20" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M32 20V8M26 12L32 8L38 12" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -458,13 +508,11 @@
         <path d="M22 22C18 22 14 20 10 16" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
     </svg>`;
 
-    // Week 2: ECG Heartbeat & Rhythm
     const ecgSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
         <path d="M32 54C48 42 56 32 52 24C48 16 36 16 32 24C28 16 16 16 12 24C8 32 16 42 32 54Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
         <path d="M8 32H16L20 22L28 46L36 14L44 38L48 32H56" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
 
-    // Week 3: Blood Vessel & Lipids
     const vesselSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
         <circle cx="32" cy="32" r="20" stroke="var(--icon-color)" stroke-width="3"/>
         <circle cx="32" cy="32" r="12" stroke="var(--icon-color)" stroke-width="2" stroke-dasharray="4 4"/>
@@ -473,7 +521,6 @@
         <circle cx="36" cy="26" r="2" fill="var(--icon-accent)"/>
     </svg>`;
 
-    // Week 4: Blood Pressure
     const bpGaugeSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
         <circle cx="32" cy="28" r="20" stroke="var(--icon-color)" stroke-width="3"/>
         <circle cx="32" cy="28" r="4" fill="var(--icon-accent)"/>
@@ -482,89 +529,200 @@
         <path d="M32 48V58C32 60 36 62 40 62H48" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
 
-    // Week 5: Circulation Loop
     const circulationSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
         <path d="M22 32C22 20 42 20 42 32C42 44 22 44 22 32Z" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M22 32C10 32 10 16 22 16M42 32C54 32 54 48 42 48" stroke="var(--icon-accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M20 12L24 16L20 20M44 44L40 48L44 52" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
 
-    const scheduleData = [
-        {
-            week: 1, icon: heartAnatomySvg,
-            lectures: [
-                { id: "L1_A", code: "L1", subject: "Anatomy", title: "Pericardium & External Features of the Heart", link: "#" },
-                { id: "L2_P", code: "L2", subject: "Physiology", title: "Introduction to Cardiovascular System (CVS)", link: "#" },
-                { id: "L3_Pa", code: "L3", subject: "Pathology", title: "Myocarditis & Pericarditis", link: "#" },
-                { id: "L4_A", code: "L4", subject: "Anatomy", title: "Internal Features of the Heart", link: "#" },
-                { id: "L5_P", code: "L5", subject: "Physiology", title: "Cardiac properties ( Rhythmicity & Conductivity )", link: "#" },
-                { id: "L6_H", code: "L6", subject: "Histology", title: "Histology of the Heart", link: "#" },
-                { id: "L7_P", code: "L7", subject: "Physiology", title: "Cardiac properties ( Excitability & Contractility )", link: "#" },
-                { id: "L8_A", code: "L8", subject: "Anatomy", title: "Blood Supply of the Heart & Great Vessels", link: "#" },
-                { id: "L9_P", code: "L9", subject: "Physiology", title: "Cardiac Cycle", link: "#" },
-                { id: "L10_Pa", code: "L10", subject: "Pathology", title: "Endocarditis & Hypertension", link: "#" },
-                { id: "L11_P", code: "L11", subject: "Physiology", title: "Application of the Cardiac Cycle", link: "#" },
-                { id: "L12_Ph", code: "L12", subject: "Pharmacology", title: "Antiarrhythmic Drugs", link: "#" }
+    // --- RESPIRATORY SVGs ---
+    const upperRespSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M32 10C24 10 20 18 20 26C20 34 26 36 32 44V56" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M32 44C38 36 44 34 44 26C44 18 40 10 32 10Z" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M28 48H36M28 52H36" stroke="var(--icon-accent)" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="32" cy="24" r="4" fill="var(--icon-accent)"/>
+    </svg>`;
+
+    const alveoliSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M32 8V24" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="24" cy="32" r="8" stroke="var(--icon-accent)" stroke-width="2.5" fill="none"/>
+        <circle cx="40" cy="32" r="8" stroke="var(--icon-accent)" stroke-width="2.5" fill="none"/>
+        <circle cx="32" cy="44" r="8" stroke="var(--icon-accent)" stroke-width="2.5" fill="none"/>
+        <path d="M32 24L28 26M32 24L36 26M32 24V36" stroke="var(--icon-color)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>`;
+
+    const lungInfectSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M32 12V24" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M32 24C24 24 16 32 16 44C16 52 22 56 30 56V36C30 30 32 24 32 24Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M32 24C40 24 48 32 48 44C48 52 42 56 34 56V36C34 30 32 24 32 24Z" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="22" cy="40" r="2" fill="var(--icon-accent)"/>
+        <circle cx="42" cy="46" r="2" fill="var(--icon-accent)"/>
+        <circle cx="38" cy="38" r="1.5" fill="var(--icon-accent)"/>
+    </svg>`;
+
+    const lungPathSvg = `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:100%;">
+        <path d="M32 12V24" stroke="var(--icon-color)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M32 24C24 24 16 32 16 44C16 52 22 56 30 56V36" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M32 24C40 24 48 32 48 44C48 52 42 56 34 56V36" stroke="var(--icon-color)" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="42" cy="44" r="6" stroke="var(--icon-accent)" stroke-width="2.5" stroke-dasharray="2 2"/>
+        <path d="M38 44L46 44M42 40L42 48" stroke="var(--icon-accent)" stroke-width="2"/>
+    </svg>`;
+
+    // --- DATA STRUCTURE FOR BOTH MODULES ---
+    const modulesData = {
+        cvs: {
+            title: "CARDIOVASCULAR SYSTEM (CVS)",
+            subtitle: "COMPREHENSIVE STUDY PLAN: WEEKLY ORGANIZATION",
+            themeClass: "",
+            footerIcons: "❤️ 🫀 🩸 🩺 💊 🔬",
+            weeks: [
+                {
+                    week: 1, icon: heartAnatomySvg,
+                    lectures: [
+                        { id: "cvs_L1", code: "L1", subject: "Anatomy", title: "Pericardium & External Features of the Heart", link: "#" },
+                        { id: "cvs_L2", code: "L2", subject: "Physiology", title: "Introduction to Cardiovascular System (CVS)", link: "#" },
+                        { id: "cvs_L3", code: "L3", subject: "Pathology", title: "Myocarditis & Pericarditis", link: "#" },
+                        { id: "cvs_L4", code: "L4", subject: "Anatomy", title: "Internal Features of the Heart", link: "#" },
+                        { id: "cvs_L5", code: "L5", subject: "Physiology", title: "Cardiac properties ( Rhythmicity & Conductivity )", link: "#" },
+                        { id: "cvs_L6", code: "L6", subject: "Histology", title: "Histology of the Heart", link: "#" },
+                        { id: "cvs_L7", code: "L7", subject: "Physiology", title: "Cardiac properties ( Excitability & Contractility )", link: "#" },
+                        { id: "cvs_L8", code: "L8", subject: "Anatomy", title: "Blood Supply of the Heart & Great Vessels", link: "#" },
+                        { id: "cvs_L9", code: "L9", subject: "Physiology", title: "Cardiac Cycle", link: "#" },
+                        { id: "cvs_L10", code: "L10", subject: "Pathology", title: "Endocarditis & Hypertension", link: "#" },
+                        { id: "cvs_L11", code: "L11", subject: "Physiology", title: "Application of the Cardiac Cycle", link: "#" },
+                        { id: "cvs_L12", code: "L12", subject: "Pharmacology", title: "Antiarrhythmic Drugs", link: "#" }
+                    ]
+                },
+                {
+                    week: 2, icon: ecgSvg,
+                    lectures: [
+                        { id: "cvs_L13", code: "L13", subject: "Anatomy", title: "Mediastinum and Great Vessels", link: "#" },
+                        { id: "cvs_L14", code: "L14", subject: "Pharmacology", title: "Management of Heart Failure", link: "#" },
+                        { id: "cvs_L15", code: "L15", subject: "Microbiology", title: "Infection of Cardiovascular System", link: "#" },
+                        { id: "cvs_L16", code: "L16", subject: "Physiology", title: "Heart Rate & Its Regulation", link: "#" },
+                        { id: "cvs_L17", code: "L17", subject: "Physiology", title: "Cardiac Output & Factors Affecting It", link: "#" },
+                        { id: "cvs_L18", code: "L18", subject: "Anatomy", title: "Vessels of Head & Neck", link: "#" },
+                        { id: "cvs_L19", code: "L19", subject: "Pharmacology", title: "Positive Inotropic Factors", link: "#" },
+                        { id: "cvs_L20", code: "L20", subject: "Pathology", title: "Rheumatic Fever", link: "#" },
+                        { id: "cvs_L21", code: "L21", subject: "Physiology", title: "Cardiac Output Regulation & Cardiac Reserve", link: "#" },
+                        { id: "cvs_L22", code: "L22", subject: "Parasitology", title: "Chagas Disease", link: "#" }
+                    ]
+                },
+                {
+                    week: 3, icon: vesselSvg,
+                    lectures: [
+                        { id: "cvs_L23", code: "L23", subject: "Pathology", title: "Cardiomyopathy", link: "#" },
+                        { id: "cvs_L24", code: "L24", subject: "Biochemistry", title: "Cholesterol Synthesis & Metabolism", link: "#" },
+                        { id: "cvs_L25", code: "L25", subject: "Physiology", title: "Tissue Blood Flow & Arteriolar Diameter", link: "#" },
+                        { id: "cvs_L26", code: "L26", subject: "Histology", title: "Structure of Blood Vessels & Microvasculature", link: "#" },
+                        { id: "cvs_L27", code: "L27", subject: "Physiology", title: "Arterial Blood Pressure & Factors Affecting It", link: "#" },
+                        { id: "cvs_L28", code: "L28", subject: "Biochemistry", title: "Lipoproteins", link: "#" },
+                        { id: "cvs_L29", code: "L29", subject: "Pathology", title: "Ischemic Heart Disease", link: "#" },
+                        { id: "cvs_L30", code: "L30", subject: "Pharmacology", title: "Antianginal Drugs & Drug Treatment of Acute Myocardial Infarction", link: "#" }
+                    ]
+                },
+                {
+                    week: 4, icon: bpGaugeSvg,
+                    lectures: [
+                        { id: "cvs_L31", code: "L31", subject: "Physiology", title: "Regulation of Arterial Blood Pressure", link: "#" },
+                        { id: "cvs_L32", code: "L32", subject: "Biochemistry", title: "Diagnostic Cardiac Enzymes", link: "#" },
+                        { id: "cvs_L33", code: "L33", subject: "Pharmacology", title: "Drug Treatment of Hypertension", link: "#" },
+                        { id: "cvs_L34", code: "L34", subject: "Physiology", title: "Functional Characteristics of Special Circulation", link: "#" },
+                        { id: "cvs_L35", code: "L35", subject: "Pharmacology", title: "Vasodilator Drugs", link: "#" },
+                        { id: "cvs_L36", code: "L36", subject: "Pathology", title: "Arteritis & Atherosclerosis", link: "#" },
+                        { id: "cvs_L37", code: "L37", subject: "Physiology", title: "Capillary Circulation", link: "#" },
+                        { id: "cvs_L38", code: "L38", subject: "Anatomy", title: "Development of CVS Part 1", link: "#" }
+                    ]
+                },
+                {
+                    week: 5, icon: circulationSvg,
+                    lectures: [
+                        { id: "cvs_L39", code: "L39", subject: "Pathology", title: "CVS Tumor", link: "#" },
+                        { id: "cvs_L40", code: "L40", subject: "Physiology", title: "Venous, Lymphatic Circulation & Oedema", link: "#" },
+                        { id: "cvs_L41", code: "L41", subject: "Anatomy", title: "Development of CVS Part 2", link: "#" },
+                        { id: "cvs_L42", code: "L42", subject: "Physiology", title: "Physiological Response to Exercise", link: "#" },
+                        { id: "cvs_L43", code: "L43", subject: "Biochemistry", title: "Hyperlipidaemia", link: "#" },
+                        { id: "cvs_L44", code: "L44", subject: "Pharmacology", title: "Management of Cardiogenic Pulmonary Shock", link: "#" },
+                        { id: "cvs_L45", code: "L45", subject: "Pharmacology", title: "Drug Treatment for Hyperlipidaemia", link: "#" },
+                        { id: "cvs_L46", code: "L46", subject: "Parasitology", title: "Cardiac Parasitosis", link: "#" },
+                        { id: "cvs_L47", code: "L47", subject: "Physiology", title: "Physiological Response to Shock & Haemorrhage", link: "#" },
+                        { id: "cvs_L48", code: "L48", subject: "Anatomy", title: "Development of Arteries", link: "#" }
+                    ]
+                }
             ]
         },
-        {
-            week: 2, icon: ecgSvg,
-            lectures: [
-                { id: "L13_A", code: "L13", subject: "Anatomy", title: "Mediastinum and Great Vessels", link: "#" },
-                { id: "L14_Ph", code: "L14", subject: "Pharmacology", title: "Management of Heart Failure", link: "#" },
-                { id: "L15_M", code: "L15", subject: "Microbiology", title: "Infection of Cardiovascular System", link: "#" },
-                { id: "L16_P", code: "L16", subject: "Physiology", title: "Heart Rate & Its Regulation", link: "#" },
-                { id: "L17_P", code: "L17", subject: "Physiology", title: "Cardiac Output & Factors Affecting It", link: "#" },
-                { id: "L18_A", code: "L18", subject: "Anatomy", title: "Vessels of Head & Neck", link: "#" },
-                { id: "L19_Ph", code: "L19", subject: "Pharmacology", title: "Positive Inotropic Factors", link: "#" },
-                { id: "L20_Pa", code: "L20", subject: "Pathology", title: "Rheumatic Fever", link: "#" },
-                { id: "L21_P", code: "L21", subject: "Physiology", title: "Cardiac Output Regulation & Cardiac Reserve", link: "#" },
-                { id: "L22_Pa", code: "L22", subject: "Parasitology", title: "Chagas Disease", link: "#" }
-            ]
-        },
-        {
-            week: 3, icon: vesselSvg,
-            lectures: [
-                { id: "L23_Pa", code: "L23", subject: "Pathology", title: "Cardiomyopathy", link: "#" },
-                { id: "L24_B", code: "L24", subject: "Biochemistry", title: "Cholesterol Synthesis & Metabolism", link: "#" },
-                { id: "L25_P", code: "L25", subject: "Physiology", title: "Tissue Blood Flow & Arteriolar Diameter", link: "#" },
-                { id: "L26_H", code: "L26", subject: "Histology", title: "Structure of Blood Vessels & Microvasculature", link: "#" },
-                { id: "L27_P", code: "L27", subject: "Physiology", title: "Arterial Blood Pressure & Factors Affecting It", link: "#" },
-                { id: "L28_B", code: "L28", subject: "Biochemistry", title: "Lipoproteins", link: "#" },
-                { id: "L29_Pa", code: "L29", subject: "Pathology", title: "Ischemic Heart Disease", link: "#" },
-                { id: "L30_Ph", code: "L30", subject: "Pharmacology", title: "Antianginal Drugs & Drug Treatment of Acute Myocardial Infarction", link: "#" }
-            ]
-        },
-        {
-            week: 4, icon: bpGaugeSvg,
-            lectures: [
-                { id: "L31_P", code: "L31", subject: "Physiology", title: "Regulation of Arterial Blood Pressure", link: "#" },
-                { id: "L32_B", code: "L32", subject: "Biochemistry", title: "Diagnostic Cardiac Enzymes", link: "#" },
-                { id: "L33_Ph", code: "L33", subject: "Pharmacology", title: "Drug Treatment of Hypertension", link: "#" },
-                { id: "L34_P", code: "L34", subject: "Physiology", title: "Functional Characteristics of Special Circulation", link: "#" },
-                { id: "L35_Ph", code: "L35", subject: "Pharmacology", title: "Vasodilator Drugs", link: "#" },
-                { id: "L36_Pa", code: "L36", subject: "Pathology", title: "Arteritis & Atherosclerosis", link: "#" },
-                { id: "L37_P", code: "L37", subject: "Physiology", title: "Capillary Circulation", link: "#" },
-                { id: "L38_A", code: "L38", subject: "Anatomy", title: "Development of CVS Part 1", link: "#" }
-            ]
-        },
-        {
-            week: 5, icon: circulationSvg,
-            lectures: [
-                { id: "L39_Pa", code: "L39", subject: "Pathology", title: "CVS Tumor", link: "#" },
-                { id: "L40_P", code: "L40", subject: "Physiology", title: "Venous, Lymphatic Circulation & Oedema", link: "#" },
-                { id: "L41_A", code: "L41", subject: "Anatomy", title: "Development of CVS Part 2", link: "#" },
-                { id: "L42_P", code: "L42", subject: "Physiology", title: "Physiological Response to Exercise", link: "#" },
-                { id: "L43_B", code: "L43", subject: "Biochemistry", title: "Hyperlipidaemia", link: "#" },
-                { id: "L44_Ph", code: "L44", subject: "Pharmacology", title: "Management of Cardiogenic Pulmonary Shock", link: "#" },
-                { id: "L45_Ph", code: "L45", subject: "Pharmacology", title: "Drug Treatment for Hyperlipidaemia", link: "#" },
-                { id: "L46_Pa", code: "L46", subject: "Parasitology", title: "Cardiac Parasitosis", link: "#" },
-                { id: "L47_P", code: "L47", subject: "Physiology", title: "Physiological Response to Shock & Haemorrhage", link: "#" },
-                { id: "L48_A", code: "L48", subject: "Anatomy", title: "Development of Arteries", link: "#" }
+        resp: {
+            title: "RESPIRATORY SYSTEM",
+            subtitle: "COMPREHENSIVE STUDY PLAN: WEEKLY ORGANIZATION",
+            themeClass: "theme-resp",
+            footerIcons: "🫁 🌬️ 🩺 🔬 💊 🦠",
+            weeks: [
+                {
+                    week: 1, icon: upperRespSvg,
+                    lectures: [
+                        { id: "resp_L1", code: "L1", subject: "Anatomy", title: "Upper respiratory tract anatomy", link: "#" },
+                        { id: "resp_L2", code: "L2", subject: "Histology", title: "Histology of upper respiratory tract", link: "#" },
+                        { id: "resp_L3", code: "L3", subject: "Anatomy", title: "Lower respiratory tract anatomy", link: "#" },
+                        { id: "resp_L4", code: "L4", subject: "Anatomy", title: "Intercostal muscles and diaphragm", link: "#" },
+                        { id: "resp_L5", code: "L5", subject: "Physiology", title: "Functional divisions of respiratory system & mechanisms of breathing", link: "#" },
+                        { id: "resp_L6", code: "L6", subject: "Histology", title: "Histology of lower respiratory tract", link: "#" },
+                        { id: "resp_L7", code: "L7", subject: "Physiology", title: "Control and factors affecting pulmonary ventilation", link: "#" },
+                        { id: "resp_L8", code: "L8", subject: "Microbiology", title: "Upper respiratory tract infections", link: "#" },
+                        { id: "resp_L9", code: "L9", subject: "Physiology", title: "Mechanism and factors affecting gas exchange through respiratory membrane", link: "#" },
+                        { id: "resp_L10", code: "L10", subject: "Anatomy", title: "Intercostal nerves & blood vessels of thoracic wall", link: "#" }
+                    ]
+                },
+                {
+                    week: 2, icon: alveoliSvg,
+                    lectures: [
+                        { id: "resp_L11", code: "L11", subject: "Physiology", title: "Carriage of O₂ by blood & O₂ dissociation curve", link: "#" },
+                        { id: "resp_L12", code: "L12", subject: "Pathology", title: "Bronchial asthma", link: "#" },
+                        { id: "resp_L13", code: "L13", subject: "Physiology", title: "Carriage of CO₂ by the blood and Cl⁻ shift phenomenon", link: "#" },
+                        { id: "resp_L14", code: "L14", subject: "Pharmacology", title: "Treatment of bronchial asthma", link: "#" },
+                        { id: "resp_L15", code: "L15", subject: "Physiology", title: "Respiratory centers and genesis of rhythmic breathing", link: "#" },
+                        { id: "resp_L16", code: "L16", subject: "Pharmacology", title: "Treatment of cough", link: "#" },
+                        { id: "resp_L17", code: "L17", subject: "Biochemistry", title: "Cellular respiration", link: "#" },
+                        { id: "resp_L18", code: "L18", subject: "Pathology", title: "COPD", link: "#" },
+                        { id: "resp_L19", code: "L19", subject: "Biochemistry", title: "pH & acid–base balance", link: "#" },
+                        { id: "resp_L20", code: "L20", subject: "Physiology", title: "Nervous & chemical regulation of respiration & chemoreceptors regulation of respiration", link: "#" }
+                    ]
+                },
+                {
+                    week: 3, icon: lungInfectSvg,
+                    lectures: [
+                        { id: "resp_L21", code: "L21", subject: "Microbiology", title: "Viral respiratory tract infections part 1", link: "#" },
+                        { id: "resp_L22", code: "L22", subject: "Biochemistry", title: "Surfactant", link: "#" },
+                        { id: "resp_L23", code: "L23", subject: "Pharmacology", title: "Oxygen therapy", link: "#" },
+                        { id: "resp_L24", code: "L24", subject: "Microbiology", title: "Bacterial infections of lower respiratory tract", link: "#" },
+                        { id: "resp_L25", code: "L25", subject: "Pathology", title: "Pathology of lower respiratory tract infection", link: "#" },
+                        { id: "resp_L26", code: "L26", subject: "Biochemistry", title: "Antioxidants", link: "#" },
+                        { id: "resp_L27", code: "L27", subject: "Parasitology", title: "Focal parasitic lung diseases", link: "#" },
+                        { id: "resp_L28", code: "L28", subject: "Physiology", title: "Physiological responses of respiratory system to exercise and hypoxia", link: "#" },
+                        { id: "resp_L29", code: "L29", subject: "Microbiology", title: "Viral respiratory tract infections part 2", link: "#" },
+                        { id: "resp_L30", code: "L30", subject: "Pharmacology", title: "Drug therapy of chronic bronchitis", link: "#" },
+                        { id: "resp_L31", code: "L31", subject: "Parasitology", title: "Diffuse parasitic lung diseases", link: "#" }
+                    ]
+                },
+                {
+                    week: 4, icon: lungPathSvg,
+                    lectures: [
+                        { id: "resp_L32", code: "L32", subject: "Microbiology", title: "General characteristics & diagnosis of mycobacteria", link: "#" },
+                        { id: "resp_L33", code: "L33", subject: "Pathology", title: "Pulmonary TB", link: "#" },
+                        { id: "resp_L34", code: "L34", subject: "Microbiology", title: "Fungal pneumonia", link: "#" },
+                        { id: "resp_L35", code: "L35", subject: "Pharmacology", title: "Treatment of pneumonia", link: "#" },
+                        { id: "resp_L36", code: "L36", subject: "Pharmacology", title: "Drug therapy of TB", link: "#" },
+                        { id: "resp_L37", code: "L37", subject: "Pathology", title: "Tumours of respiratory system", link: "#" },
+                        { id: "resp_L38", code: "L38", subject: "Anatomy", title: "Development of respiratory system", link: "#" },
+                        { id: "resp_L39", code: "L39", subject: "Physiology", title: "Effect of high pressure on respiratory system", link: "#" }
+                    ]
+                }
             ]
         }
-    ];
+    };
 
+    let activeModule = 'cvs'; // Default
+
+    // --- نظام الوضع الليلي (Dark Mode) ---
     const themeToggle = document.getElementById('theme-toggle');
     const currentTheme = localStorage.getItem('theme') || 'light';
     
@@ -587,10 +745,19 @@
         localStorage.setItem('theme', theme);
     });
 
-    let savedProgress = JSON.parse(localStorage.getItem('cvsProgress')) || {};
+    // --- Data Persistence ---
+    // Use a single object in localStorage to hold progress for ALL modules
+    let savedProgress = JSON.parse(localStorage.getItem('medicalModulesProgress')) || { cvs: {}, resp: {} };
+    
+    // Migration: If user has old cvsProgress, move it to the new structure
+    const oldCvsProgress = localStorage.getItem('cvsProgress');
+    if (oldCvsProgress && Object.keys(savedProgress.cvs).length === 0) {
+        savedProgress.cvs = JSON.parse(oldCvsProgress);
+        localStorage.setItem('medicalModulesProgress', JSON.stringify(savedProgress));
+    }
 
     function saveProgress() {
-        localStorage.setItem('cvsProgress', JSON.stringify(savedProgress));
+        localStorage.setItem('medicalModulesProgress', JSON.stringify(savedProgress));
         updateProgressBars();
     }
 
@@ -599,8 +766,8 @@
         const mcqCheckbox = document.getElementById(lecId + '_mcq');
         const row = document.getElementById(rowId);
         
-        savedProgress[lecId] = lecCheckbox.checked;
-        savedProgress[lecId + '_mcq'] = mcqCheckbox.checked;
+        savedProgress[activeModule][lecId] = lecCheckbox.checked;
+        savedProgress[activeModule][lecId + '_mcq'] = mcqCheckbox.checked;
         
         if (lecCheckbox.checked && mcqCheckbox.checked) {
             row.classList.add('completed');
@@ -614,19 +781,20 @@
     function updateProgressBars() {
         let totalTasks = 0;
         let completedTasks = 0;
+        const currentData = modulesData[activeModule].weeks;
 
-        scheduleData.forEach(weekData => {
+        currentData.forEach(weekData => {
             let weekTotalTasks = weekData.lectures.length * 2;
             let weekCompletedTasks = 0;
 
             weekData.lectures.forEach(lec => {
                 totalTasks += 2;
                 
-                if (savedProgress[lec.id]) {
+                if (savedProgress[activeModule][lec.id]) {
                     completedTasks++;
                     weekCompletedTasks++;
                 }
-                if (savedProgress[lec.id + '_mcq']) {
+                if (savedProgress[activeModule][lec.id + '_mcq']) {
                     completedTasks++;
                     weekCompletedTasks++;
                 }
@@ -647,11 +815,13 @@
         const container = document.getElementById('schedule-container');
         container.innerHTML = ''; 
         
-        scheduleData.forEach(weekData => {
+        const currentData = modulesData[activeModule].weeks;
+
+        currentData.forEach(weekData => {
             let rowsHtml = '';
             weekData.lectures.forEach(lec => {
-                const isLecChecked = savedProgress[lec.id] ? 'checked' : '';
-                const isMcqChecked = savedProgress[lec.id + '_mcq'] ? 'checked' : '';
+                const isLecChecked = savedProgress[activeModule][lec.id] ? 'checked' : '';
+                const isMcqChecked = savedProgress[activeModule][lec.id + '_mcq'] ? 'checked' : '';
                 const completedClass = (isLecChecked && isMcqChecked) ? 'completed' : '';
                 const subjectClass = `subject-${lec.subject.toLowerCase()}`;
                 
@@ -707,6 +877,28 @@
         updateProgressBars();
     }
 
+    function switchModule(moduleKey) {
+        activeModule = moduleKey;
+        
+        // Handle Tabs styling
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tab-${moduleKey}`).classList.add('active');
+
+        // Handle Theme/Colors (Resp gets a slightly different blueish accent in dark mode)
+        document.body.className = document.body.className.replace(/theme-\w+/g, '').trim();
+        if (modulesData[moduleKey].themeClass) {
+            document.body.classList.add(modulesData[moduleKey].themeClass);
+        }
+
+        // Update Text
+        document.getElementById('page-main-title').innerText = modulesData[moduleKey].title;
+        document.getElementById('page-subtitle').innerText = modulesData[moduleKey].subtitle;
+        document.getElementById('footer-icons').innerText = modulesData[moduleKey].footerIcons;
+
+        // Render Data
+        renderSchedule();
+    }
+
     // --- نظام الأذكار التلقائي ---
     const athkar = [
         "صلِّ على النبي ﷺ",
@@ -747,12 +939,11 @@
 
     // يظهر كل 5 دقائق
     setInterval(showThikr, 300000); 
-
-    // أول ذكر بعد 10 ثوانٍ كترحيب
     setTimeout(showThikr, 10000);
 
-    // Initial render
-    window.onload = renderSchedule;
+    // Initial load
+    switchModule('cvs'); // Loads CVS by default
+
 </script>
 
 </body>
